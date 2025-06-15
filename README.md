@@ -1,6 +1,3 @@
-# coop_pg
-coop sqlpage template on postgresql database
-
 # 1. COOP ?
 
 COOP is the result of a personal project around the  monitoring of building rehabilitation projects in mix mode involving professionals and private individuals. These projects are monitored and coordinated by a network of independent associations. This explains the name of the app and the section devoted to collaborative
