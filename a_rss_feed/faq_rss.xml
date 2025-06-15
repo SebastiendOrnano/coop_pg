@@ -1,0 +1,22 @@
+SELECT 'http_header' AS component, 'application/rss+xml' AS content_type;
+SELECT 'shell-empty' AS component;
+SELECT
+  'rss' AS component,
+  'Suivi des messages' AS title,
+  'http://127.0.0.1/Coop/site_management/rss.sql' AS link,
+  'Suivi des messages envoyés sur le site Coop' AS description,
+  'fr' AS language,
+  'Technology' AS category,
+  FALSE AS explicit,
+  'https://sql.datapage.app/favicon.ico' AS image_url,
+  'admin Coop' AS author,
+  'https://github.com/sponsors/lovasoa' AS funding_url,
+  'episodic' AS type;
+SELECT
+  'Bonjour' AS title,
+  'https://sql.datapage.app/blog.sql?post=Come%20see%20me%20build%20twitter%20live%20on%20stage%20in%20Prague' AS link,
+  'If some of you european SQLPagers are around Prague this december, I will be giving a talk about SQLPage at pgconf.eu on December 14th.' AS description,
+  'http://127.0.0.1:8080/sqlpage_introduction_video.webm' AS enclosure_url,
+  123456789 AS enclosure_length,
+  'video/webm' AS enclosure_type,
+  '2023-12-04' AS date;
