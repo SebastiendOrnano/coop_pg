@@ -5,7 +5,7 @@ work.
 
 COOP is a 3 in 1 modular app combining a website, teams workspaces and building rehab projects management. COOP is a multilevel user app : admin, supervisor, editor, viewer, public, with a possibility of group permissions at each level. 
 
-  * The project management module allows to monitor  project schedule throug gantt charts, team composition, workhours, expenses, wastes, carbon footprint, meetings schedules, pictures gallery and documents . The module include also a supervisor dashboard with various stats. 
+  * The project management module allows to monitor  project schedule throug gantt charts, team composition, workhours, expenses, wastes, carbon footprint, meetings schedules, pictures gallery and documents . The module include also a supervisor dashboard with various stats and an adress book.
   * The workspace module includes various tools : FAQ, forum, chat, news, events.
   * The website module includes standard features : About us, Contact form, FAQ, news, events, event registration. It includes also some tools to manage a small orgnization : members and membership follow up, document.
   * The admin panel includes the users permissions management,  a debug forum, help and process management, connexions stats, list of choices and patterns managemet. 
