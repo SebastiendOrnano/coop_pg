@@ -3,7 +3,12 @@
 COOP is the result of a personal project around the  monitoring of building rehabilitation projects in mix mode involving professionals and private individuals. These projects are monitored and coordinated by a network of independent associations. This explains the name of the app and the section devoted to collaborative
 work. 
 
-COOP is a 3 in 1 modular app combining a website, teams workspaces and building rehab projects management. COOP is a multilevel user app : admin, supervisor, editor, viewer, public, with a possibility of group permissions at each level. The project management module allows to monitor  project schedule throug gantt charts, team composition, workhours, expenses, wastes, carbon footprint, meetings schedules, pictures gallery and documents . The module include also a supervisor dashboard with various stats. The workspace module includes various tools : FAQ, forum, chat, news, events.
+COOP is a 3 in 1 modular app combining a website, teams workspaces and building rehab projects management. COOP is a multilevel user app : admin, supervisor, editor, viewer, public, with a possibility of group permissions at each level. 
+
+  * The project management module allows to monitor  project schedule throug gantt charts, team composition, workhours, expenses, wastes, carbon footprint, meetings schedules, pictures gallery and documents . The module include also a supervisor dashboard with various stats. 
+  * The workspace module includes various tools : FAQ, forum, chat, news, events.
+  * The website module includes standard features : About us, Contact form, FAQ, news, events, event registration. It includes also some tools to manage a small orgnization : members and membership follow up, document.
+  * The admin panel includes the users permissions management,  a debug forum, help and process management, connexions stats, list of choices and patterns managemet. 
 
 I am not an IT pro so I choose [SQLPage](https://sql-page.com/) to develop COOP. COOP code is very simple: basic SQL queries, SQLPage base (no custom components, no scripts), very academic query writing, very explicit file and folder names... The first version of COOP was develop with sqlite as database engine but it was not constistent with the collaborative aim of COOP, so COOP was rewrite to work on postgresql. Postgreql allows multiple connexions in the same time and postgresql offers much more features for further developpements (for example : links to postgis).
 
