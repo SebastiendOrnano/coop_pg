@@ -5,23 +5,23 @@ work.
 
 COOP is a 3 in 1 modular app combining a website, teams workspaces and building rehab projects management. COOP is a multilevel user app : admin, supervisor, editor, viewer, public, with a possibility of group permissions at each level (*if needed, COOP can be sliced down to one or two modules*).
 
-  * The project management module allows to monitor  project schedule throug gantt charts, team composition, workhours, expenses, wastes, carbon footprint, meetings schedules, pictures gallery and documents . The module include also a supervisor dashboard with various stats and an adress book.
+  * The project management module allows to monitor  project schedule through Gantt charts, team composition, workhours, expenses, wastes, carbon footprint, meetings schedules, pictures gallery and documents . The module include also a supervisor dashboard with various stats and an address book.
   * The workspace module includes various tools : FAQ, forum, chat, news, events.
-  * The website module includes standard features : About us, Contact form, FAQ, news, events, event registration. It includes also some tools to manage a small orgnization : members and membership follow up, document.
-  * The admin panel includes the users permissions management,  a debug forum, help and process management, connexions stats, list of choices and patterns managemet. 
+  * The website module includes standard features : About us, Contact form, FAQ, news, events, event registration. It includes also some tools to manage a small organization : members and membership follow up, document.
+  * The admin panel includes the users permissions management,  a debug forum, help and process management, connexions stats, list of choices and patterns management. 
 
-I am not an IT pro so I choose [SQLPage](https://sql-page.com/) to develop COOP. COOP code is very simple: basic SQL queries, SQLPage base (no custom components, no scripts), very academic query writing, very explicit file and folder names... The first version of COOP was develop with sqlite as database engine but it was not constistent with the collaborative aim of COOP, so COOP was rewrite to work on postgresql. Postgreql allows multiple connexions in the same time and postgresql offers much more features for further developpements (for example : links to postgis).
+I am not an IT pro so I choose [SQLPage](https://sql-page.com/) to develop COOP. COOP code is very simple: basic SQL queries, SQLPage base (no custom components, no scripts), very academic query writing, very explicit file and folder names... The first version of COOP was develop with sqlite as database engine but it was not consistent with the collaborative aim of COOP, so COOP was rewrite to work on Postgresql. Postgreql allows multiple connections in the same time and postgresql offers much more features for further developments (for example : links to Postgis).
 
 COOP can be used as a template, a draft to develop more complex apps around project management, or as a set of examples to discover SQLpage.
 
-COOP was developed with SQLpage 0.35.2, postgresql 16, linux mint 22.1. Development tools : VSCodium, DBeaver-CE, Pandoc, Retex (*all free and open source apps, thanks to all developers !*)
+COOP was developed with SQLpage 0.35.2, Postgresql 16, linux mint 22.1. Development tools : VSCodium, DBeaver-CE, Pandoc, Retex (*all free and open source apps, thanks to all developers !*)
 
 
 # 2. Install COOP
 
 Installing COOP is straightforward:
 
--   install postgresql (version 16 or +)
+-   install Postgresql (version 16 or +)
 
 -   create a user : coop with its password
 
@@ -61,7 +61,7 @@ COOP comes with several preset user accounts :
 
 **all accounts are using the same password: CoopCoop1@**
 
-Playing with differrent accounts can be usefull to test the collaborative tools : forum, chat, event.
+Playing with different accounts can be useful to test the collaborative tools : forum, chat, event.
 
 To create new users,you need to use the sign up form in the menu "connect" then log as admin to set the rights of the new user in the menu "NEW USERS" in the admin dashboard panel.
 
