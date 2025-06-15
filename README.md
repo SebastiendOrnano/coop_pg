@@ -49,7 +49,7 @@ Installing COOP is straightforward:
 
 COOP comes with several preset user accounts :
 
--   "admin1@coopcoop.net", "admin2@coopcoop.net", "admin3@coopcoop.net"
+-   admin1@coopcoop.net, admin2@coopcoop.net, admin3@coopcoop.net
 
 -   supervisor1@coopcoop.net, supervisor2@coopcoop.net, supervisor3@coopcoop.net
 
