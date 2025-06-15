@@ -58,6 +58,18 @@ COOP comes with several preset user accounts :
 -   viewer1@coopcoop.net, viewer2@coopcoop.net, viewer3@coopcoop.net,
 
 
+
+-   admin1@coopcoop.net, admin2@coopcoop.net, admin3@coopcoop.net
+
+-   supervisor1@coopcoop.net, supervisor2@coopcoop.net, supervisor3@coopcoop.net
+
+-   editor1@coopcoop.net, editor2@coopcoop.net, editor3@coopcoop.net
+
+-   viewer1@coopcoop.net, viewer2@coopcoop.net, viewer3@coopcoop.net,
+
+
+
+
 **all accounts are using the same password: CoopCoop1@**
 
 Playing with differrent accounts can be usefull to test the collaborative tools : forum, chat, event.
