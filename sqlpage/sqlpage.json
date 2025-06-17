@@ -1,4 +1,4 @@
 {
-  "database_url": "postgres://sebastien:@boucaou@localhost:5432/coop",
+  "database_url": "postgres://coop:MyCoopPassword@localhost:5432/coop",
   "content_security_policy": ""
 }
