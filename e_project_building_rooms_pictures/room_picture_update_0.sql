@@ -4,9 +4,7 @@ SET project_id = (SELECT project_id FROM project_building WHERE building_id = $b
 
 
 SET room_picture_url = sqlpage.persist_uploaded_file('room_picture_url', 'x_pictures_spaces', 'doc,docx,odt,md,pdf,jpg,jpeg,png');
-SET room_picture_url_old = SELECT room_picture_url FROM project_building_rooms_pictures WHERE room_picture_id=$room_picture_id::INTEGER;
-SET room_picture_url_old_to_erase = CASE WHEN $room_picture_url IS NOT NULL OR $room_picture_url !='' THEN $room_picture_url_old ELSE '' END;
-INSERT INTO files_to_erase (file_url) VALUES ($room_picture_url_old_to_erase);
+
 
 SET user_role = (
     SELECT user_role FROM users
