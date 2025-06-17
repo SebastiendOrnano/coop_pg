@@ -27,9 +27,9 @@ Installing COOP is straightforward:
 
 -   download the entire COOP_pg folder from Github
 
--   paste the  COOP_pg folder into` /var/www - > /var/www/coop`
+-   paste the files and folder from  COOP_pg folder into` /var/www/coop`
 
--   restore coop database from the dump file located at` /var/www/coop/a_install/dump-coop-*******.sql ;` the dump comes with few data which are necessary to use COOP : users accounts, list of choices...
+-   restore coop database from the dump file located at` /var/www/coop/a_install/dump-coop-*******.sql ;` the dump comes with few data which are necessary to use COOP : users accounts, list of choices...(*You may have to adjust the beginning of the file about the users and roles*)
 
 -   modify the json file located at `/var/www/coop/sqlpage/sqlpage.json` to setup the password in
 
