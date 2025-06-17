@@ -21,31 +21,35 @@ COOP was developed with SQLpage 0.35.2, Postgresql 16, linux mint 22.1. Developm
 
 Installing COOP is straightforward:
 
--   install Postgresql (version 16 or +)
+-   install postgresql (version 16 or +)
 
 -   create a user : coop with its password
 
 -   download the entire COOP_pg folder from Github
 
--   paste the  COOP_pg folder into /var/www - > /var/www/coop
+-   paste the  COOP_pg folder into` /var/www - > /var/www/coop`
 
--   restore coop database from the dump file located at /var/www/coop/a_install/dump-coop-*******.sql ; the dump comes with few data which are necessary to use COOP : users accounts, list of choices...
+-   restore coop database from the dump file located at` /var/www/coop/a_install/dump-coop-*******.sql ;` the dump comes with few data which are necessary to use COOP : users accounts, list of choices...
 
--   modify the json file located at /var/www/coop/sqlpage/sqlpage.json to setup the password in
+-   modify the json file located at `/var/www/coop/sqlpage/sqlpage.json` to setup the password in
 
 
 ` "database_url": "postgres://coop:CoopPassword@localhost:5432/coop",`
 
+
+- to display the correct info about your organisation, you need to set up the `orga_dept_id` in `$orga_footer, $orga_dept_name, $logo` in  `/var/www/coop/a_shells/shell_core.sql`. By default, the `orga_dept_id` is set on '2' but if you have made some changes in the `orga_dept` table it can be the good value. You may have to do the same adjustments in the files of the folder `/var/www/coop/b_about`.
+
+
 -   set up write permissions on the sub-folders with an "x\_" prefix (these
     are used to download documents or images)
 
--   in the terminal, go to the COOP folder: /var/www/coop
+-   in the terminal, go to the COOP folder:` /var/www/coop`
 
--   in the terminal, launch SQLPage: /var/www/coop/sqlpage/sqlpage.bin
+-   in the terminal, launch SQLPage: `/var/www/coop/sqlpage/sqlpage.bin`
 
 -   *you can create a sevice to launch sqlpage when starting you computer [see the post](https://github.com/sqlpage/SQLPage/discussions/603)*
 
--   in your browser, go to: http://localhost:8080/
+-   in your browser, go to: `http://localhost:8080/`
 
 # 3. Start the tour.
 
