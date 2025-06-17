@@ -27,7 +27,6 @@ SELECT
     'statut de publication actuel'      AS label,
     'select'                            AS type,
     4                                   AS width,
-    'choisir un statut dans la liste...'    AS  empty_option,
     'Choisir un statut dans la liste...' AS empty_option,
     json_agg(JSON_BUILD_OBJECT('label', i.choice_label, 'value', i.choice_value)) AS options
     FROM choices_items AS i 

@@ -1,7 +1,7 @@
 
 UPDATE info_sections
 SET 
-section_category='help-dev',
+section_category='help_dev',
 section_number=:section_number::INTEGER ,
 section_title=:section_title, 
 section_content=:section_content, 

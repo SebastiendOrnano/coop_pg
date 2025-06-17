@@ -10,7 +10,7 @@ section_content
 )
 values 
 ( 
-'help-dev',
+'help_dev',
 :section_status,
 :section_number::INTEGER ,
 :section_lang,

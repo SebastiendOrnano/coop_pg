@@ -55,6 +55,6 @@ SELECT
  
    '[Edit](/a_info/section_main_edit_5.sql?section_id='||section_id|| ')&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Delete](/a_info/section_main_delete_0.sql?section_id='||section_id||')'    AS View
 FROM info_sections
-WHERE section_status !='archived' AND section_category!='help-dev'
+WHERE section_status !='archived' AND section_category!='help_dev'
 
 ORDER BY section_category ASC, cast(section_number as int)  ASC ;
