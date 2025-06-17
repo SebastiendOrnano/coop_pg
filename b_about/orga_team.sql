@@ -18,7 +18,7 @@ SELECT
             ELSE member_picture_url
         END 
     )   AS image_url
-    FROM members WHERE member_category='team' AND member_status='active' ;
+    FROM members WHERE member_category='team' AND member_status='active' AND orga_dept_id = '2' ;
 
 
 

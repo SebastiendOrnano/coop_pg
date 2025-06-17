@@ -15,7 +15,7 @@ SELECT
      orga_partner_punchline           AS footer,
      orga_partner_logo_url            AS image_url
     FROM orga_partners
-WHERE orga_partner_status = 'active' AND orga_partner_type='partner' AND orga_partner_category='gold';
+WHERE orga_partner_status = 'active' AND orga_partner_type='partner' AND orga_partner_category='gold' AND orga_dept_id = '2' ;
 
 
 SELECT 
@@ -28,7 +28,7 @@ SELECT
     orga_partner_punchline           AS footer,
     orga_partner_logo_url            AS image_url
     FROM orga_partners
-WHERE orga_partner_status = 'active' AND orga_partner_type='partner' AND orga_partner_category='silver';
+WHERE orga_partner_status = 'active' AND orga_partner_type='partner' AND orga_partner_category='silver'AND orga_dept_id = '2' ;
 
 
 SELECT 
@@ -41,6 +41,6 @@ SELECT
     orga_partner_punchline           AS footer,
     orga_partner_logo_url            AS image_url
     FROM orga_partners
-WHERE orga_partner_status = 'active' AND orga_partner_type='partner' AND orga_partner_category='bronze';
+WHERE orga_partner_status = 'active' AND orga_partner_type='partner' AND orga_partner_category='bronze' AND orga_dept_id = '2' ;
 
 

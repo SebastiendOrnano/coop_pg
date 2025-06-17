@@ -1,6 +1,6 @@
 SELECT 'dynamic' AS component, sqlpage.run_sql('a_shells/shell.sql') AS properties;
 
-SET orga_dept_name = (SELECT orga_dept_name FROM orga_dept WHERE orga_dept_id = '1');
+SET orga_dept_name = (SELECT orga_dept_name FROM orga_dept WHERE orga_dept_id = '2');
 
 
 SELECT 

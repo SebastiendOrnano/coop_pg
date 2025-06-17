@@ -30,4 +30,4 @@ SELECT
    '  ' AS title,
     320                       AS height
  
-FROM members WHERE member_category='govern' AND member_status='active' ;
+FROM members WHERE member_category='govern' AND member_status='active' AND orga_dept_id = '2' ;

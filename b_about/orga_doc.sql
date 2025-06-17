@@ -23,7 +23,7 @@ SELECT
    orga_doc_date_publication     AS Date_Pub,
    orga_doc_date_period          AS Periode
 FROM orga_docs
-WHERE orga_doc_status = 'active' AND orga_doc_category = 'annual_report'
+WHERE orga_doc_status = 'active' AND orga_doc_category = 'annual_report' AND orga_dept_id = '2' 
 ORDER BY created_at DESC;
 
 SELECT 
@@ -44,7 +44,7 @@ SELECT
    orga_doc_date_publication     AS Date_Pub,
    orga_doc_date_period          AS Periode
 FROM orga_docs
-WHERE orga_doc_status = 'active' AND  orga_doc_category ='annual_results'
+WHERE orga_doc_status = 'active' AND  orga_doc_category ='annual_results' AND orga_dept_id = '2' 
 ORDER BY created_at DESC;
 
 SELECT 
@@ -65,5 +65,5 @@ SELECT
    orga_doc_date_publication     AS Date_Pub,
    orga_doc_date_period          AS Periode
 FROM orga_docs
-WHERE orga_doc_status = 'active' AND  orga_doc_category ='unknown'
+WHERE orga_doc_status = 'active' AND  orga_doc_category ='unknown' AND orga_dept_id = '2' 
 ORDER BY created_at DESC;
