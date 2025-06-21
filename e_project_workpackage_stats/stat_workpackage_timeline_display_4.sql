@@ -92,4 +92,4 @@ SELECT
     CONCAT (s.worksequence_start_date_actual,' ',s.worksequence_start_hour_actual)    as value,
     CONCAT (s.worksequence_start_date_actual,' ',s.worksequence_end_hour_actual)     as value
   FROM project_worksequence as s
-  WHERE s.workpackage_id=$workpackage_id::INTEGER;
+  WHERE s.workpackage_id=$workpackage_id::INTEGER AND s.worksequence_start_hour_actual IS NOT NULL AND s.worksequence_end_hour_actual IS NOT NULL;
