@@ -3,9 +3,6 @@ SET building_id = (SELECT building_id FROM project_building_rooms WHERE room_id 
 SET project_id = (SELECT project_id FROM project_building WHERE building_id = $building_id::INTEGER) ;
 
 SET room_picture_url= (SELECT room_picture_url FROM project_building_rooms_pictures WHERE  room_picture_id = $room_picture_id::INTEGER);
-INSERT INTO files_to_erase (file_url) VALUES ($room_picture_url);
-
-
 SET user_role = (
     SELECT user_role FROM users
     INNER JOIN sessions ON users.user_id = sessions.user_id
