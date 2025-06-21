@@ -1,6 +1,6 @@
 SELECT 'dynamic' AS component, sqlpage.run_sql('a_shells/shell_4.sql') AS properties;
 
-SET building_id = (SELECT building_id FROM project_building_rooms WHERE room_id = $room_id) ;
+SET building_id = (SELECT building_id FROM project_building_rooms WHERE room_id = $room_id::INTEGER) ;
 
 
 SELECT 
