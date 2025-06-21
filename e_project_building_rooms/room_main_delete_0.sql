@@ -1,6 +1,5 @@
 SET building_id= SELECT building_id FROM project_building_rooms WHERE room_id=$room_id::INTEGER;;
-SET room_picture_url= (SELECT room_picture_url FROM project_building_rooms_pictures WHERE  room_id  = $room_id);
-INSERT INTO files_to_erase (file_url) VALUES ($room_picture_url);
+SET room_picture_url= (SELECT room_picture_url FROM project_building_rooms_pictures WHERE  room_id  = $room_id::INTEGER);
 
 SET user_role = (
     SELECT user_role FROM users
@@ -14,7 +13,7 @@ THEN  '/e_project_building_rooms/room_main_display_4.sql?building_id='||$buildin
 ELSE  '/e_project_building_rooms/room_main_display_3.sql?building_id='||$building_id
 END;
 
-DELETE FROM project_building_rooms WHERE room_id  = $room_id;
+DELETE FROM project_building_rooms WHERE room_id  = $room_id::INTEGER;
 
 SELECT 'redirect' as component,
 $redirect_link as link;
