@@ -1727,6 +1727,8 @@ CREATE TABLE public.project_building_rooms_pictures (
     building_id integer,
     project_id integer,
     room_id integer,
+    workpackage_id integer,
+    worksequence_id integer,
     room_picture_url text,
     room_picture_title text,
     room_picture_summary text,
