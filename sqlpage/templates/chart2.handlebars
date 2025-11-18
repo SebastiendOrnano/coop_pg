@@ -1,0 +1,399 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <title>RangeBar ApexCharts - Plages horaires (heures dans la même journée)</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+  <style>
+    body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; padding: 20px; }
+    .card { border: 1px solid #ddd; border-radius: 6px; padding: 12px; max-width: 900px; }
+    .chart { height: 360px; }
+    .spinner-wrapper { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); }
+    /* make bars pointer so user knows they are clickable */
+    .apexcharts-series .apexcharts-bar-area { cursor: pointer; }
+
+    /* clickable y-axis label styling */
+    #chart-canvas .apexcharts-yaxis .clickable-label {
+      cursor: pointer;
+      text-decoration: underline;
+    }
+    #chart-canvas .apexcharts-yaxis .clickable-label:focus {
+      outline: 2px solid #2684FF;
+      outline-offset: 2px;
+    }
+    .apexcharts-tooltip-range a { color: #2684FF; text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+  <div id="rangebar-1" class="card" data-pre-init="chart">
+    <h3 class="card-title">{{title}}</h3>
+
+    <div class="chart">
+      <div id="chart-canvas"></div>
+      <div class="spinner-wrapper" id="spinner">
+        Loading...
+      </div>
+
+      <!-- Inline JSON data. The last item in each point row is the link (or null). -->
+<data hidden>
+{
+  "type": {{stringify type}},
+  "time": {{stringify time}},
+  "labels": {{stringify labels}},
+  "marker": {{stringify marker}},
+  "xtitle": {{stringify xtitle}},
+  "ytitle": {{stringify ytitle}},
+  "ztitle": {{stringify ztitle}},
+  "xticks": {{stringify xticks}},
+  "yticks": {{stringify yticks}},
+  "ystep": {{stringify ystep}},
+  "xmin": {{stringify xmin}},
+  "ymin": {{stringify ymin}},
+  "xmax": {{stringify xmax}},
+  "ymax": {{stringify ymax}},
+  "toolbar": {{stringify toolbar}},
+  "logarithmic": {{stringify logarithmic}},
+  "horizontal": {{stringify horizontal}},
+  "stacked": {{stringify stacked}},
+  "height": {{stringify (default height 250)}},
+  "colors": {{stringify (to_array color)}},
+  "points":
+     [
+      {{~#each_row~}}
+        {{~#if (gt @row_index 0)}},{{/if~}}
+        [
+            {{~ stringify (default series (default ../title "")) ~}},
+            {{~ stringify (default x label) ~}},
+            {{~ stringify (default y value) ~}}
+            {{~#if z}}, {{~ stringify z ~}} {{~/if~}}
+            {{~#if link}}, {{~ stringify link ~}} {{~/if~}}
+        ]
+    {{~/each_row~}}
+    ]
+        }
+      </data>
+    </div>
+  </div>
+
+<script>
+(function(){
+  const container = document.querySelector('[data-pre-init="chart"]');
+  if (!container) return;
+
+  const dataEl = container.querySelector("data");
+  if (!dataEl) return;
+
+  // decode HTML entities if present
+  let raw = dataEl.textContent || "";
+  if (raw.includes("&")) {
+    const txt = document.createElement("textarea");
+    txt.innerHTML = raw;
+    raw = txt.value;
+  }
+
+  let chartData;
+  try {
+    chartData = JSON.parse(raw);
+  } catch (e) {
+    console.error("Failed to parse chart data JSON:", e, raw);
+    return;
+  }
+
+  const rawPoints = Array.isArray(chartData.points) ? chartData.points : [];
+  const looksLikeLink = (val) => typeof val === "string" && (/(^https?:\/\/)/i.test(val.trim()) || /^\//.test(val.trim()) || /^mailto:/i.test(val.trim()));
+
+  // Convert many common date/time representations into milliseconds since epoch.
+  const toMs = (d) => {
+    if (typeof d === "number") return d;
+    if (d === null || d === undefined || d === "") return null;
+    const s0 = String(d).trim();
+
+    // pure numeric string -> treat as ms
+    if (/^\d+$/.test(s0)) return Number(s0);
+
+    // Normalize date/time strings so Date parses reliably
+    let normalized;
+    if (s0.includes("T")) {
+      normalized = s0;
+    } else if (s0.match(/^\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}(:\d{2})?(\.\d+)?(Z)?$/)) {
+      normalized = s0.replace(/\s+/, "T");
+    } else if (s0.match(/^\d{4}-\d{2}-\d{2}$/)) {
+      normalized = `${s0}T00:00:00`;
+    } else {
+      normalized = s0;
+    }
+
+    const dt = new Date(normalized);
+    if (isNaN(dt)) return null;
+    return dt.getTime();
+  };
+
+  // Build a single-series dataset: each point has x label (string), y: [startMs,endMs], link.
+  const dataPoints = [];
+
+  rawPoints.forEach((pt, idx) => {
+    if (!Array.isArray(pt) || pt.length < 3) return;
+
+    const label = (pt[0] !== undefined && pt[0] !== null) ? String(pt[0]) : `row-${idx}`;
+    let startRaw = null;
+    let endRaw = null;
+    const candidateY = pt[2];
+
+    if (Array.isArray(candidateY)) {
+      startRaw = candidateY[0];
+      endRaw = candidateY.length > 1 ? candidateY[1] : null;
+    } else if (pt.length >= 4 && candidateY && pt[3]) {
+      startRaw = candidateY;
+      endRaw = pt[3];
+    } else if (typeof candidateY === "string") {
+      const sep = candidateY.includes("—") ? "—" : (candidateY.includes(" - ") ? " - " : (candidateY.includes(" to ") ? " to " : null));
+      if (sep) {
+        const parts = candidateY.split(sep).map(s => s.trim()).filter(Boolean);
+        startRaw = parts[0] || candidateY;
+        endRaw = parts[1] || null;
+      } else {
+        startRaw = candidateY;
+        endRaw = null;
+      }
+    } else if (typeof candidateY === "number") {
+      startRaw = candidateY;
+      endRaw = null;
+    }
+
+    const startMs = toMs(startRaw);
+    let endMs = toMs(endRaw);
+
+    if (startMs !== null && (endMs === null || endMs <= startMs)) {
+      endMs = (endMs === null) ? (startMs + 60 * 1000) : Math.max(endMs, startMs + 1000);
+    }
+
+    if (startMs === null || endMs === null) return;
+
+    const linkRaw = pt[pt.length - 1];
+    const link = looksLikeLink(linkRaw) ? String(linkRaw).trim() : null;
+
+    dataPoints.push({
+      x: label,
+      y: [startMs, endMs],
+      link: link
+    });
+  });
+
+  if (dataPoints.length === 0) {
+    console.warn("No valid data points for chart.");
+  }
+
+  const formatDateTime = (ms) => {
+    const d = new Date(ms);
+    if (isNaN(d)) return String(ms);
+    return d.toLocaleString(undefined, {
+      year: "numeric", month: "numeric", day: "numeric",
+      hour: "2-digit", minute: "2-digit"
+    });
+  };
+
+  const formatDateOrRange = (val) => {
+    if (Array.isArray(val)) {
+      return val.map(v => (typeof v === "number" ? formatDateTime(v) : (toMs(v) !== null ? formatDateTime(toMs(v)) : String(v)))).join(" — ");
+    }
+    if (typeof val === "number") return formatDateTime(val);
+    const maybe = toMs(val);
+    if (maybe !== null) return formatDateTime(maybe);
+    return String(val);
+  };
+
+  const series = [{
+    name: chartData.title || "Plages",
+    data: dataPoints
+  }];
+
+  const chartContainer = document.getElementById("chart-canvas");
+  const spinner = document.getElementById("spinner");
+
+  // Helper to open links in a new tab and fallback to navigation only when popup blocked.
+  function openLinkInNewTab(url) {
+    try {
+      const newWin = window.open(url, '_blank');
+      // Some browsers block window.open and return null => fallback navigate current tab
+      if (!newWin) {
+        window.location.assign(url);
+      } else {
+        try { newWin.opener = null; } catch (e) { /* ignore */ }
+      }
+    } catch (e) {
+      // last resort
+      window.location.assign(url);
+    }
+  }
+
+  // Attach click/keyboard handlers to Y-axis label elements.
+  // Robust: tries to find per-label <g> groups, falls back to text nodes.
+  function attachLabelLinks() {
+    if (!chartContainer) return;
+
+    // Prefer the per-label <g> nodes for y-axis text (one g per label)
+    let labelGroups = chartContainer.querySelectorAll('.apexcharts-yaxis .apexcharts-yaxis-texts-g > g');
+
+    let fallbackToText = false;
+    if (!labelGroups || labelGroups.length === 0) {
+      const textNodes = chartContainer.querySelectorAll('.apexcharts-yaxis text');
+      if (!textNodes || textNodes.length === 0) return;
+      fallbackToText = true;
+      labelGroups = textNodes;
+    }
+
+    labelGroups.forEach((groupEl, idx) => {
+      // get matching data point by index
+      const pt = dataPoints[idx];
+      const link = pt && pt.link ? pt.link : null;
+
+      // Determine element that receives events: prefer group's inner text element if present
+      let textEl = groupEl;
+      if (!fallbackToText && groupEl.querySelector) {
+        const innerText = groupEl.querySelector('text');
+        if (innerText) textEl = innerText;
+      }
+
+      // Clear previous handlers / attributes if no link
+      if (!link) {
+        textEl.classList.remove('clickable-label');
+        textEl.style.cursor = '';
+        textEl.style.fill = '';
+        textEl.removeAttribute('role');
+        textEl.removeAttribute('tabindex');
+        // remove handlers (setting to null is simple and avoids needing to track references)
+        try { groupEl.onclick = null; } catch (e) {}
+        try { groupEl.onkeydown = null; } catch (e) {}
+        try { textEl.onclick = null; } catch (e) {}
+        try { textEl.onkeydown = null; } catch (e) {}
+        return;
+      }
+
+      textEl.classList.add('clickable-label');
+      textEl.style.cursor = 'pointer';
+      textEl.style.fill = '#0366d6';
+      textEl.setAttribute('role', 'link');
+      textEl.setAttribute('tabindex', '0');
+
+      // handler functions (assigned directly to properties to ensure single binding)
+      const clickHandler = function(evt) {
+        if (evt && typeof evt.preventDefault === 'function') evt.preventDefault();
+        if (evt && typeof evt.stopPropagation === 'function') evt.stopPropagation();
+        if (evt && typeof evt.stopImmediatePropagation === 'function') evt.stopImmediatePropagation();
+        openLinkInNewTab(link);
+      };
+      const keyHandler = function(evt) {
+        if (evt.key === 'Enter' || evt.key === ' ') {
+          if (evt && typeof evt.preventDefault === 'function') evt.preventDefault();
+          if (evt && typeof evt.stopPropagation === 'function') evt.stopPropagation();
+          openLinkInNewTab(link);
+        }
+      };
+
+      // assign handlers to both group and text nodes for robustness
+      try { groupEl.onclick = clickHandler; } catch (e) {}
+      try { groupEl.onkeydown = keyHandler; } catch (e) {}
+      try { textEl.onclick = clickHandler; } catch (e) {}
+      try { textEl.onkeydown = keyHandler; } catch (e) {}
+    });
+  }
+
+  const options = {
+    chart: {
+      type: chartData.type || 'rangeBar',
+      height: chartData.height || 360,
+      toolbar: { show: false },
+      events: {
+        // when a bar is clicked, open its link in a new tab if present
+        dataPointSelection: function(event, chartContext, config) {
+          try {
+            const sIdx = config.seriesIndex;
+            const dIdx = config.dataPointIndex;
+            const point = chartContext.w.config.series?.[sIdx]?.data?.[dIdx];
+            const link = point?.link;
+            if (!link) return;
+            openLinkInNewTab(link);
+          } catch (err) {
+            console.error("Error handling dataPointSelection:", err);
+          }
+        },
+        // re-attach label listeners after initial render and after updates
+        mounted: function(ctx) { setTimeout(attachLabelLinks, 0); },
+        updated: function(ctx) { setTimeout(attachLabelLinks, 0); }
+      }
+    },
+    plotOptions: {
+      bar: {
+        horizontal: true,
+        dataLabels: { position: "top" }
+      }
+    },
+    series: series,
+    xaxis: {
+      type: "datetime",
+      labels: {
+        datetimeUTC: false,
+        format: "dd / MM / yy HH:mm"
+      }
+    },
+    yaxis: {
+      labels: {
+        formatter: function(val, i) {
+          const point = series[0].data[i];
+          return point && point.x !== undefined ? String(point.x) : String(val);
+        }
+      }
+    },
+    tooltip: {
+      x: {
+        show: true,
+        formatter: function(value) {
+          return formatDateOrRange(value);
+        }
+      },
+      y: {
+        formatter: function(val) {
+          if (Array.isArray(val)) return val.map(v => (typeof v === "number" ? formatDateTime(v) : (toMs(v) !== null ? formatDateTime(toMs(v)) : String(v)))).join(" — ");
+          if (typeof val === "number") return formatDateTime(val);
+          const ms = toMs(val);
+          return ms !== null ? formatDateTime(ms) : String(val);
+        }
+      },
+      custom: function({ series, seriesIndex, dataPointIndex, w }) {
+        const pt = w.config.series[seriesIndex].data[dataPointIndex];
+        const yFormatted = Array.isArray(pt.y) ? (formatDateTime(pt.y[0]) + " — " + formatDateTime(pt.y[1])) : formatDateOrRange(pt.y);
+        const label = pt.x || "";
+        const link = pt.link;
+        let html = '<div class="apexcharts-tooltip-range">';
+        html += `<div><strong>${label}</strong></div>`;
+        html += `<div>${yFormatted}</div>`;
+        if (link) {
+          html += `<div style="margin-top:6px"><a href="${link}" target="_blank" rel="noopener">Open link</a></div>`;
+        }
+        html += '</div>';
+        return html;
+      }
+    },
+    colors: chartData.colors || undefined
+  };
+
+  const chart = new ApexCharts(chartContainer, options);
+  chart.render()
+    .then(() => {
+      if (spinner) spinner.remove();
+      // ensure labels handlers are attached once DOM is stable
+      setTimeout(attachLabelLinks, 50);
+    })
+    .catch(err => console.error("ApexCharts render error:", err));
+
+  // Re-attach label listeners on window resize as ApexCharts may recreate axis nodes.
+  window.addEventListener('resize', function() {
+    setTimeout(attachLabelLinks, 150);
+  });
+
+})();
+</script>
+</body>
+</html>
