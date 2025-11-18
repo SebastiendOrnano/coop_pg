@@ -69,7 +69,7 @@ on p.project_id=w.project_id
 WHERE p.project_id=$project_id::INTEGER;
 
 SELECT 
-    'chart'            as component,
+    'chart2'            as component,
     'Worksquences Timeline' as title,
     'rangeBar'         as type,
     TRUE               as time,
@@ -81,6 +81,7 @@ SELECT
 SELECT 
     s.worksequence_name                       as series,
     s.worksequence_name  ||'    Planififié'    as label,
+   'http://localhost:8080/e_project_worksequence/worksequence_main_edit_4.sql?worksequence_id='||s.worksequence_id as link,
     CONCAT (s.worksequence_start_date_scheduled,' ',s.worksequence_start_hour_scheduled)    as value,
     CONCAT (s.worksequence_start_date_scheduled,' ',s.worksequence_end_hour_scheduled)     as value
   FROM project_worksequence as s
@@ -89,6 +90,7 @@ SELECT
 SELECT 
     s.worksequence_name                       as series,
     s.worksequence_name  ||'    Réel'    as label,
+   'http://localhost:8080/e_project_worksequence/worksequence_main_edit_4.sql?worksequence_id='||s.worksequence_id as link,
     CONCAT (s.worksequence_start_date_actual,' ',s.worksequence_start_hour_actual)    as value,
     CONCAT (s.worksequence_start_date_actual,' ',s.worksequence_end_hour_actual)     as value
   FROM project_worksequence as s
