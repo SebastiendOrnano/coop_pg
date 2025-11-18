@@ -11,10 +11,10 @@ SELECT
     'Gestion Superviseur'         AS title,
     '/a_panels/panel_supervisor_4.sql' AS link;
  SELECT 
-    'Retour à la liste des projets'            AS title,
+    'Liste des projets'            AS title,
     '/e_project/project_main_display_4.sql'     AS link;
  SELECT 
-    'Retour au hub du projet'            AS title,
+    'Hub du projet'            AS title,
     '/e_project/project_hub_display_4.sql?project_id='||$project_id     AS link;   
 
 SELECT 
@@ -52,10 +52,11 @@ ON p.project_id = w.project_id
 WHERE p.project_id = $project_id::INTEGER;
 
 SELECT 
-    'chart'            AS component,
+    'chart1'            AS component,
     'Workpackage Timeline' AS title,
     'rangeBar'         AS type,
     TRUE               AS time,
+    TRUE               as horizontal,
     'green'            AS color,
     'blue'             AS color,
     $date_start_mini   AS xmin,
@@ -64,6 +65,7 @@ SELECT
 SELECT 
     w.workpackage_name                       AS series,
     w.workpackage_name  ||'    Planififié'    AS label,
+   'http://localhost:8080/e_project_workpackage/workpackage_main_edit_4.sql?workpackage_id='||w.workpackage_id as link,
     w.workpackage_date_start_scheduled        AS value,
     w.workpackage_date_end_scheduled          AS value
   FROM project_workpackage AS w
@@ -75,10 +77,10 @@ SELECT
 SELECT 
     w.workpackage_name                       AS series,
     w.workpackage_name  ||'    Réel'         AS label,
+   'http://localhost:8080/e_project_workpackage/workpackage_main_edit_4.sql?workpackage_id='||w.workpackage_id as link,
     w.workpackage_date_start_actual      AS value,
     w.workpackage_date_end_actual         AS value
 FROM project_workpackage AS w
 left join (SELECT project_id FROM project) AS p
 on w.project_id=p.project_id
 WHERE p.project_id=$project_id::INTEGER AND w.workpackage_date_start_actual IS NOT NULL AND w.workpackage_date_end_actual IS NOT NULL;
-
