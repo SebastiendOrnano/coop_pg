@@ -1,0 +1,55 @@
+<div class="modal fade" id="{{id}}" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog {{#if large}}modal-xl{{/if}} modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{title}}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body p-0">
+        <div id="{{id}}_content" style="min-height: 300px;">
+          <div class="d-flex justify-content-center align-items-center p-5">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Chargement...</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{close}}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const modalEl = document.getElementById('{{id}}');
+  
+  modalEl.addEventListener('show.bs.modal', function (event) {
+    const trigger = event.relatedTarget;
+    const url = trigger?.dataset?.url;
+    
+    if (url) {
+      // ✅ URL COMPLÈTE EN DUR
+      const fullUrl = 'http://localhost:8080/' + url.replace(/^\//, '');
+      
+      const content = document.getElementById('{{id}}_content');
+      content.innerHTML = `
+        <iframe src="${fullUrl}" 
+                class="w-100 border-0" 
+                style="height: 60vh; min-height: 400px;" 
+                sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+                loading="lazy">
+          <div class="alert alert-danger p-3">
+            Erreur chargement: <a href="${fullUrl}" target="_blank" class="btn btn-sm btn-primary">Ouvrir</a>
+          </div>
+        </iframe>
+      `;
+    }
+  });
+});
+</script>
+
+
+

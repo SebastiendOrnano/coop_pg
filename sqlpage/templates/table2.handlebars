@@ -1,0 +1,174 @@
+<div class="card my-2 {{class}}" {{#if overflow}}style="width: fit-content;"{{/if}} {{#if id}}id="{{id}}"{{/if}}>
+    <div class="card-body p-0" data-pre-init="table2">
+        {{#if (or search initial_search_value)}}
+        <div class="p-3">
+            <input
+                id="{{component_index}}-search"
+                type="search"
+                class="form-control form-control-rounded fs-6 search"
+                placeholder="{{default search_placeholder 'Search…'}}"
+                value="{{initial_search_value}}"
+                {{#if initial_search_value}}autocomplete="off"{{/if}}
+            >
+        </div>
+        {{/if}}
+        <div class="table-responsive
+            {{~#if freeze_columns}} table-freeze-columns text-nowrap {{/if~}}
+            {{~#if freeze_headers}} table-freeze-headers text-nowrap {{/if~}}
+            {{~#if freeze_footers}} table-freeze-footers text-nowrap {{/if~}}
+        ">
+            <table class="table
+            {{~#if striped_rows}} table-striped {{/if~}}
+            {{~#if striped_columns}} table-striped-columns {{/if~}}
+            {{~#if hover}} table-hover {{/if~}}
+            {{~#if border}} table-bordered {{/if~}}
+            {{~#if small}} table-sm {{/if~}}
+            "
+            {{~#if number_format_locale}} data-number_format_locale="{{number_format_locale}}"{{/if~}}
+            {{~#if number_format_digits}} data-number_format_digits="{{number_format_digits}}"{{/if~}}
+            {{~#if currency}} data-currency="{{currency}}"{{/if~}}
+            >
+            {{#if description}}<caption class="text-center text-muted">{{description}}</caption>{{/if}}
+                {{#each_row}}
+                    {{#if (eq @row_index 0)}}
+                        {{! Since we are inside the first data row, render the header }}
+                        <thead>
+                        <tr>
+                            {{#each this}}
+                                {{!-- Exclude internal _sqlpage_ columns AND exclude a raw 'doc' column
+                                     to avoid duplicate icon when using _sqlpage_modal_actions.
+                                     Remove the (not (eq @key 'doc')) check if you want to keep a data-column named doc. --}}
+                                {{#if (and (not (starts_with @key '_sqlpage_')) (not (eq @key 'doc')))}}
+                                <th class="
+                                    _col_{{replace @key ' ' '_'~}}
+                                    {{~#if (array_contains_case_insensitive ../../align_right @key)}} text-end {{/if~}}
+                                    {{~#if (array_contains_case_insensitive ../../align_center @key)}} text-center {{/if~}}
+                                "
+                                    data-column_type="{{typeof this}}"
+                                    {{~#if (array_contains_case_insensitive ../../raw_numbers @key)}} data-raw_number="1"{{/if~}}
+                                    {{~#if (array_contains_case_insensitive ../../money @key)}} data-money="1"{{/if~}}
+                                >
+                                    {{~#if ../../sort~}}
+                                        <button class="table-sort sort d-inline" data-sort="{{@key}}">{{@key}}</button>
+                                    {{~else~}}
+                                        {{~@key~}}
+                                    {{~/if~}}
+                                </th>
+                                {{/if}}
+                            {{/each}}
+                            {{#if ../edit_url}}<th class="_col_edit text-center">Edit</th>{{/if}}
+                            {{#if ../delete_url}}<th class="_col_delete text-center">Delete</th>{{/if}}
+                            {{#each (to_array ../custom_actions)}}
+                                <th class="_col_custom text-center">{{this.name}}</th>
+                            {{/each}}
+
+                            {{#each (to_array _sqlpage_actions)}}
+                                <th class="_col_action text-center">{{this.name}}</th>
+                            {{/each}}
+
+                            {{!-- Header cell(s) for modal actions provided in _sqlpage_modal_actions --}}
+                            {{#each (to_array _sqlpage_modal_actions)}}
+                                <th class="_col_modal_action text-center">{{this.name}}</th>
+                            {{/each}}
+                        </tr>
+                        </thead>
+                        <tbody class="table-tbody list">{{#delay}}</tbody>{{/delay}}
+                    {{~/if~}}
+                    {{!~ If this data row should go into the footer, close the <tbody>, open the <tfoot> ~}}
+                    {{~#if _sqlpage_footer~}} </tbody><tfoot> {{/if~}}
+                    <tr class="{{_sqlpage_css_class}} {{#if _sqlpage_color}}bg-{{_sqlpage_color}}-lt{{/if}}" {{#if _sqlpage_id}}id="{{_sqlpage_id}}"{{/if}}>
+                        {{~#each this~}}
+                            {{~#if (and (not (starts_with @key '_sqlpage_')) (not (eq @key 'doc')) )~}}
+                            <td class="align-middle _col_{{replace @key ' ' '_'~}}
+                                {{~#if (array_contains_case_insensitive ../../align_right @key)}} text-end {{/if~}}
+                                {{~#if (array_contains_case_insensitive ../../align_center @key)}} text-center {{/if~}}
+                                {{~#if (array_contains_case_insensitive ../../monospace @key)}} font-monospace {{/if~}}
+                            ">
+                                {{~#if (array_contains_case_insensitive ../../markdown @key)~}}
+                                    {{{markdown this}}}
+                                {{~else~}}
+                                    {{~#if (array_contains_case_insensitive ../../icon @key)~}}
+                                        {{~icon_img this~}}
+                                    {{~else~}}
+                                        {{this}}
+                                    {{~/if~}}
+                                {{~/if~}}
+                            </td>
+                            {{/if}}
+                        {{~/each~}}
+
+                        {{#if ../edit_url}}
+                        <td class="align-middle _col_edit text-center">
+                            <a href="{{replace ../edit_url '{id}' _sqlpage_id}}" class="align-middle link-secondary _col_edit" data-action="edit" title="Edit">
+                                {{~icon_img 'edit'~}}
+                            </a>
+                        </td>
+                        {{/if}}
+
+                        {{#if ../delete_url}}
+                        <td class="align-middle _col_delete text-center">
+                            <a href="{{replace ../delete_url '{id}' _sqlpage_id}}" class="align-middle link-secondary _col_delete" data-action="delete" title="Delete">
+                                {{~icon_img 'trash'~}}
+                            </a>
+                        </td>
+                        {{/if}}
+
+                        {{#each (to_array ../custom_actions)}}
+                        <td class="align-middle _col_{{this.name}} text-center">
+                            <a href="{{replace this.link '{id}' ../_sqlpage_id}}" class="align-middle link-secondary _col_{{this.name}}" data-action="{{this.name}}" title="{{default this.tooltip this.name}}">
+                                {{~icon_img this.icon~}}
+                            </a>
+                        </td>
+                        {{/each}}
+
+                        {{#each (to_array _sqlpage_actions)}}
+                        <td class="align-middle _col_{{this.name}} text-center">
+                            <a href="{{replace this.link '{id}' ../_sqlpage_id}}" class="align-middle link-secondary _col_{{this.name}}" data-action="{{this.name}}" title="{{default this.tooltip this.name}}">
+                                {{~icon_img this.icon~}}
+                            </a>
+                        </td>
+                        {{/each}}
+
+                        {{!-- Render modal actions (array) and pass final URL into data-embed.
+                             The helper `replace` substitutes {id} with the row id at render time, so data-embed
+                             contains the final URL (e.g. ...project_forum_message_id=53). --}}
+                        {{#each (to_array _sqlpage_modal_actions)}}
+                            <td class="align-middle _col_modal_{{this.name}} text-center">
+                                <a href="{{replace this.link '{id}' ../_sqlpage_id}}"
+                                role="button"
+                                data-embed="{{replace this.link '{id}' ../_sqlpage_id}}"
+                                data-url="{{replace this.link '{id}' ../_sqlpage_id}}"
+                                data-bs-toggle="modal"
+                                data-bs-target="#sqlpage_dynamic_modal"
+                                data-modal="sqlpage_dynamic_modal"
+                                class="align-middle link-secondary _col_{{this.name}}"
+                                data-action="{{this.name}}"
+                                title="{{default this.tooltip this.name}}">
+                                    {{~icon_img this.icon~}}
+                                </a>
+                            </td>
+                            {{/each}}
+                    </tr>
+
+                    {{!~ 
+                        After this <tr> has been rendered, if this was a footer, we need to reopen a new <tbody> 
+                        No need for another delayed closure since the previous one still applies
+                    ~}}
+                    {{~#if _sqlpage_footer}} </tfoot><tbody class="table-tbody list"> {{/if~}}
+                {{/each_row}}
+                {{flush_delayed}}
+
+                {{! If not enough rows were rendered, we need to place a 'No data' cell. "Not enough rows" depends on the footer settings }}
+                {{#if (eq @row_index 0)}}
+                    <tbody class="table-tbody list">
+                        <tr>
+                            <td class="text-center">{{default empty_description 'No data'}}</td>
+                        </tr>
+                    </tbody>
+                {{/if}}
+            </table>
+        </div>
+    </div>
+</div>
+
+
