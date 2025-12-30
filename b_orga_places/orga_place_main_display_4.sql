@@ -1,0 +1,53 @@
+SELECT 'dynamic' AS component, sqlpage.run_sql('a_shells/shell_4.sql') AS properties;
+
+SELECT 
+    'breadcrumb' as component;
+SELECT 
+    'Home' as title,
+    '/'    as link;
+SELECT 
+    'Gestion Superviseur'         as title,
+    '/a_panels/panel_supervisor_4.sql' as link;
+
+
+SELECT 
+    'datagrid'              as component,
+    'panel_place_display' as id;
+
+SELECT 
+
+    '/b_orga_places/orga_place_main_form_4.sql'      as link,
+    'Création d''un nouveau lieu'                    as description,
+    'building-community'                             as icon,
+    'yellow'                                         as color;
+
+SELECT 
+    '/b_orga_places/orga_place_archive_display_4.sql'  as link,
+    'Visualiser les lieux archivés'                     as description,
+    'archive'                                          as icon,
+    'green'                                            as color;
+
+SELECT
+    'divider' as component,
+    'black' as color,
+    'left' as position,
+    'Liste des lieux' as contents;
+
+
+
+-- Display list of places
+SELECT 'table' AS component, 
+    'Liste des salles'   AS title, 
+    JSON('{"name":"Spaces","tooltip":"Salles dans le bâtiment","link":"/b_orga_place_spaces/orga_place_space_main_display_4.sql?place_id={id}","icon":"building-community"}') as custom_actions,
+    '/b_orga_places/orga_place_main_edit_4.sql?news_id={id}' as edit_url,
+    '/b_orga_places/orga_place_main_delete_0.sql?news_id={id}' as delete_url,
+    TRUE             AS sort, 
+    TRUE             AS search;
+
+SELECT
+    place_id         AS Id,
+    place_id          as _sqlpage_id,
+    place_name        AS Nom,
+    place_town        AS Ville
+FROM place WHERE place_name IS NOT NULL AND place_status !='archived'
+ORDER BY place_id ASC;
