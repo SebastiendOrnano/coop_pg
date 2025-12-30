@@ -1,0 +1,63 @@
+SELECT 'dynamic' AS component, sqlpage.run_sql('a_shells/shell_3.sql') AS properties;
+
+SELECT 
+    'breadcrumb' AS component;
+SELECT 
+    'Home' AS title,
+    '/'    AS link;
+SELECT 
+    'Gestion éditeur'         AS title,
+    '/a_panels/panel_editor_3.sql' AS link;
+
+SELECT 
+    'datagrid'              AS component,
+    'panel_event_display' AS id;
+
+SELECT 
+    '/b_events/event_resa_display_3.sql'             AS link,
+    'Vérif occupation des salles'                    AS description,
+    'users-group'                                    AS icon,
+    'blue'                                           AS color;
+
+SELECT 
+    '/b_events/event_main_form_3.sql'               AS link,
+    'Création d''un nouvel événement'               AS description,
+    'confetti'                                      AS icon,
+    'yellow'                                        AS color;
+
+
+SELECT 
+    '/b_events/event_past_display_3.sql'             AS link,
+    'Visualiser les événements terminés'             AS description,
+    'calendar-clock'                                 AS icon,
+    'green'                                          AS color;
+
+SELECT 
+    'divider'              AS component,
+    'Liste des événements à venir' AS contents,
+    'left'                 AS position,
+    'black'                AS color;
+
+-- Display list of organizations
+SELECT 'table' AS component, 
+    'Liste des événements à venir'   AS title, 
+    'View'           AS markdown,
+    TRUE             AS sort, 
+    TRUE             AS search;
+
+SELECT
+    e.event_id               AS Id,
+    e.event_name             AS Nom,
+    e.event_public_private           AS PublicPrivé,
+    e.event_status           AS statut,
+    e.event_date             AS Date,
+    e.event_start_hour       AS heure,
+    s.space_name             AS Salle,
+    e.event_participants_nb          AS NB_inscrits,
+   '[View & Partcipants](/b_events/event_poster_3.sql?event_id=' || e.event_id || ')&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Edit](/b_events/event_main_edit_3.sql?event_id='||e.event_id||')'    AS View
+FROM events AS e
+LEFT JOIN (SELECT space_id, space_name FROM place_spaces) AS s 
+ON s.space_id = e.space_id
+WHERE e.event_name IS NOT NULL AND e.event_status ='active' AND e.event_date > CURRENT_DATE
+ORDER BY e.event_date DESC;
+
