@@ -18,7 +18,7 @@ I am not an IT pro so I choose [SQLPage](https://sql-page.com/) to develop COOP.
 
 COOP can be used as a template, a draft to develop more complex apps around project management, or as a set of examples to discover SQLpage.
 
-COOP was developed with SQLpage 0.40.0, Postgresql 16, linux mint 22.1. Development tools : VSCodium, DBeaver-CE, Pandoc, Retex (*all free and open source apps, thanks to all developers !*)
+COOP was developed with SQLpage 0.41.0, Postgresql 16, linux mint 22.1. Development tools : VSCodium, DBeaver-CE, Pandoc, Retex (*all free and open source apps, thanks to all developers !*)
 
 
 # 2. Install COOP
@@ -33,6 +33,8 @@ Installing COOP is straightforward:
 
 -   paste the files and folder from  COOP_pg folder into` /var/www/coop`
 
+-   fetch the last release of sqlpage.bin at https://github.com/sqlpage/SQLPage/releases n paste it in the folder /var/www/coop/sqlpage
+
 -   restore coop database from the dump file located at` /var/www/coop/a_install/dump-coop-*******.sql ;` the dump comes with few data which are necessary to use COOP : users accounts, list of choices...(*You may have to adjust the beginning of the file about the users and roles*)
 
 -   modify the json file located at `/var/www/coop/sqlpage/sqlpage.json` to setup the password in
@@ -41,7 +43,7 @@ Installing COOP is straightforward:
 ` "database_url": "postgres://coop:CoopPassword@localhost:5432/coop",`
 
 
-- to display the correct info about your organisation, you need to set up the `orga_dept_id` in `$orga_footer, $orga_dept_name, $logo` in  `/var/www/coop/a_shells/shell_core.sql`. By default, the `orga_dept_id` is set on '2' but if you have made some changes in the `orga_dept` table it can be the good value. You may have to do the same adjustments in the files of the folder `/var/www/coop/b_about`.
+- to display the correct info about your organisation, you need to choose the "master" orga_dept from the admin panel (so you have first to fill all informations regrding your organisation)`.
 
 
 -   set up write permissions on the sub-folders with an "x\_" prefix (these
