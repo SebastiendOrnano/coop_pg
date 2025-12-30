@@ -33,7 +33,7 @@ Installing COOP is straightforward:
 
 -   paste the files and folder from  COOP_pg folder into` /var/www/coop`
 
--   fetch the last release of sqlpage.bin at https://github.com/sqlpage/SQLPage/releases n paste it in the folder /var/www/coop/sqlpage
+-   fetch the last release of sqlpage.bin at [SQLPAGE rep](https://github.com/sqlpage/SQLPage/releases) and paste it in the folder /var/www/coop/sqlpage
 
 -   restore coop database from the dump file located at` /var/www/coop/a_install/dump-coop-*******.sql ;` the dump comes with few data which are necessary to use COOP : users accounts, list of choices...(*You may have to adjust the beginning of the file about the users and roles*)
 
