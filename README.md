@@ -10,11 +10,15 @@ COOP is a 3 in 1 modular app combining a website, teams workspaces and building 
   * The website module includes standard features : About us, Contact form, FAQ, news, events, event registration. It includes also some tools to manage a small organization : members and membership follow up, document.
   * The admin panel includes the users permissions management,  a debug forum, help and process management, connexions stats, list of choices and patterns management. 
 
+
+Disclaimer: _I am a self-taught developer. I copy and paste snippets of code found in forums or tutorials or created using AI engines. I don't even understand always what I am pasting ! A professional developer will surely be able to produce a faster and cleaner code. Your comments and suggestions are therefore welcome!_
+
+
 I am not an IT pro so I choose [SQLPage](https://sql-page.com/) to develop COOP. COOP code is very simple: basic SQL queries, SQLPage base (no custom components, no scripts), very academic query writing, very explicit file and folder names... The first version of COOP was develop with sqlite as database engine but it was not consistent with the collaborative aim of COOP, so COOP was rewrite to work on Postgresql. Postgreql allows multiple connections in the same time and postgresql offers much more features for further developments (for example : links to Postgis).
 
 COOP can be used as a template, a draft to develop more complex apps around project management, or as a set of examples to discover SQLpage.
 
-COOP was developed with SQLpage 0.35.2, Postgresql 16, linux mint 22.1. Development tools : VSCodium, DBeaver-CE, Pandoc, Retex (*all free and open source apps, thanks to all developers !*)
+COOP was developed with SQLpage 0.40.0, Postgresql 16, linux mint 22.1. Development tools : VSCodium, DBeaver-CE, Pandoc, Retex (*all free and open source apps, thanks to all developers !*)
 
 
 # 2. Install COOP
