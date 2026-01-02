@@ -134,10 +134,11 @@ SELECT
   THEN  JSON('{"name": "edit","tooltip": "corriger votre message","link": "/e_project_forum/project_forum_message_edit_3.sql?project_forum_message_id={id}","icon": "edit"}')
   ELSE JSON('{"name": "edit"}')
   END AS _sqlpage_actions
-WHERE m.project_forum_topic_id = $project_forum_topic_id::INTEGER 
-  AND m.project_forum_message_rank != 'main' 
-  AND m.project_forum_message_status = 'active'
-ORDER BY m.created_at ASC;
+    FROM project_forum_messages AS m
+    WHERE m.project_forum_topic_id = $project_forum_topic_id::INTEGER 
+    AND m.project_forum_message_rank != 'main' 
+     AND m.project_forum_message_status = 'active'
+    ORDER BY m.created_at ASC;
 
 SELECT 
     'divider'              as component,
