@@ -1,4 +1,4 @@
-SELECT 'dynamic' AS component, sqlpage.run_sql('a_shells/shell_4.sql') AS properties;
+SELECT 'dynamic' AS component, sqlpage.run_sql('a_shells/shell_3.sql') AS properties;
 
 SET user_id = (
     SELECT users.user_id  FROM users
