@@ -61,7 +61,7 @@ SELECT     'Employee'              AS markdown,
 SELECT 
     'table'               AS component, 
     TRUE                  AS sort, 
-    '/e_project_worksequence_participants/worksequence_participant_main_edit_4.sql?worksequence_participant_id={id}' as edit_url,
+    '/e_project_worksequence_participants/worksequence_participant_main_edit_3.sql?worksequence_participant_id={id}' as edit_url,
     'Nom'                AS markdown,
     'Employee'              AS markdown, 
     'Corporate'              AS markdown, 
