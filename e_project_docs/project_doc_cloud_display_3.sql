@@ -17,7 +17,7 @@ SELECT
     'breadcrumb' AS component;
 SELECT 
     'Gestion des docs'            AS title,
-    '/e_project_docs/project_doc_main_display_4.sql?project_id='||$project_id     AS link;
+    '/e_project_docs/project_doc_main_display_3.sql?project_id='||$project_id     AS link;
 
     
 
