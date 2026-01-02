@@ -26,7 +26,7 @@ SELECT
 -- Display list of organizations
 SELECT 'table' AS component, 
     'Liste des organisations'   AS title, 
-    JSON('{"name":"Dept","tooltip":"Dept","link":"/d_prm2_sub/prm2_sub_main_display_4.sql?prm2_id={id}","icon":"building-factory-2"}') as custom_actions,
+    JSON('{"name":"Dept","tooltip":"Dept","link":"/d_prm2_sub/prm2_sub_main_display_3.sql?prm2_id={id}","icon":"building-factory-2"}') as custom_actions,
     '/d_prm2/prm2_main_edit_3.sql?prm2_id={id}' as edit_url,
     TRUE             AS sort, 
     TRUE             AS search;
