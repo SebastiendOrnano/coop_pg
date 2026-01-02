@@ -61,7 +61,7 @@ SELECT
     prm2_sub_id              AS _sqlpage_id,
     prm2_sub_name            AS Nom,
     prm2_sub_postal_code     AS CodePostal,
-    prm2_sub_town            AS Ville,
+    prm2_sub_town            AS Ville
     FROM prm2_sub 
 WHERE prm2_sub_id = $prm2_sub_id::INTEGER
 ORDER BY prm2_sub_id ASC;
