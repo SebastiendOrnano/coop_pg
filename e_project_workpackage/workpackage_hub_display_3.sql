@@ -30,12 +30,6 @@ SELECT
     'Création d''un nouveau séquence'                  AS description,
     'subtask'                                      AS icon,
     'yellow'                                         AS color;
-
-SELECT 
-   '/e_project_workpackage_participants/workpackage_participant_main_display_3.sql?workpackage_id='||$workpackage_id            AS link,
-    'WKP Participants'                  AS description,
-    'users'                                            AS icon,
-    'blue'                                              AS color;
 SELECT 
    '/e_project_workpackage_expenses/expense_main_display_3.sql?workpackage_id='||$workpackage_id            AS link,
     'Dépenses - achats'                  AS description,
