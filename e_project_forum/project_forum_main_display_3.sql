@@ -34,7 +34,6 @@ SELECT 'table' AS component,
     'Forum forum_topics'   AS title, 
     '/e_project_forum/project_forum_main_edit_3.sql?project_forum_topic_id={id}' as edit_url,
     JSON('{"name":"topic","tooltip":"Voir la discussion","link":"/e_project_forum/project_forum_message_display_3.sql?project_forum_topic_id={id}","icon":"transform"}') as custom_actions,
-    JSON('{"name":"close","tooltip":"Clore la discussion","link":"/e_project_forum/project_forum_main_close_0.sql?project_forum_topic_id={id}","icon":"lock"}') as custom_actions,
     TRUE                   AS sort, 
     TRUE                   AS search;
 
