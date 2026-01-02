@@ -1,6 +1,16 @@
 SELECT 'dynamic' AS component, sqlpage.run_sql('a_shells/shell_3.sql') AS properties;
+SELECT 
+    'breadcrumb' as component;
+SELECT 
+    'Home' as title,
+    '/'    as link;
+SELECT 
+    'Gestion Editeur'         as title,
+    '/a_panels/panel_editor_3.sql' as link;
+SELECT 
+    'Gestion des personnes physiques'            as title,
+    '/d_prm1/prm1_main_display_3.sql'         as link;
 
--- selection panel
 
 SELECT 
     'alert'                    as component,
@@ -11,19 +21,7 @@ SELECT
 SELECT
     'datagrid'              as component,
     'panel_prm1_display' as id,
-    'Traitements sur une sélection membres de l''prm2nisation' as title;
-
-SELECT 
-    '/a_panels/panel_editor_4.sql'         as link,
-    'Retour au tableau de bord editeur'    as description,
-    'corner-down-left-double'                  as icon,
-    'red'                                    as color;
-
-SELECT
-    '/d_prm1/prm1_main_display_3.sql'         as link,
-    'Retour à la liste des personnes'                as description,
-    'corner-down-left'                             as icon,
-    'blue'                                          as color;
+    'Traitements sur une sélection membres de l''organisation' as title;
 
 SELECT
     '/d_prm1/prm1_select_no_0.sql'               as link,
