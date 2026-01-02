@@ -31,12 +31,6 @@ SELECT
 
 
 SELECT 
-    '/d_prm1/prm1_import_csv_4.sql'                    as link,
-    'Importation à partir d''un fichier csv'                as description,
-    'upload'                                             as icon,
-    'yellow'                                                 as color;
-
-SELECT 
     '/d_prm1/prm1_csv_full_0.sql'                   as link,
     'Téléchargement de la liste de tous les personnes'     as description,
     'file-download'                                      as icon,
@@ -82,7 +76,7 @@ SELECT 'table' AS component,
     'Liste des personnes'   AS title, 
     JSON('{"name":"View","tooltip":"Voir le profil","link":"/d_prm1/prm1_profile_display_3.sql?prm1_id={id}","icon":"user-circle"}') as custom_actions,
     JSON('{"name":"Doc","tooltip":"Documents liés à la personne","link":"/d_prm1_doc/prm1_doc_main_display_3.sql?prm1_id={id}","icon":"paperclip"}') as custom_actions,
-    '/d_prm1/prm1_main_edit_4.sql?prm1_id={id}' as edit_url,
+    '/d_prm1/prm1_main_edit_3.sql?prm1_id={id}' as edit_url,
     'Img'  as markdown,
     TRUE             AS sort, 
     TRUE             AS search;
