@@ -48,7 +48,7 @@ SELECT
     p.product_climate_change_indicator       AS Indicator,
     m.material_equiv_fonctional_units        AS EquivUnitFonction,
     m.material_carbon_footprint              AS BilanCarbone,
-    JSON( '{"name":"Edit","tooltip":"edit","link":"/e_project_workpackage_materials/material_main_edit_4.sql?material_id='||m.material_id||'","icon":"edit"}') AS _sqlpage_actions
+    JSON( '{"name":"Edit","tooltip":"edit","link":"/e_project_workpackage_materials/material_main_edit_3.sql?material_id='||m.material_id||'","icon":"edit"}') AS _sqlpage_actions
 
 FROM project_workpackage_materials AS m
 LEFT JOIN (SELECT product_id, product_name,product_climate_change_indicator FROM project_products ) AS p
