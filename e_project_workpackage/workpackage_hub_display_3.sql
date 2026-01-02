@@ -62,7 +62,7 @@ SELECT
     'Liste des séquences rattachées au lot de travaux' AS title, 
     TRUE                  AS sort, 
     JSON('{"name":"WKS - Participants","tooltip":"Intervenants sur le lot de travail","link":"/e_project_worksequence_participants/worksequence_participant_main_display_4.sql?worksequence_id={id}","icon":"users"}') as custom_actions,
-    '/e_project_worksequence/worksequence_main_edit_4.sql?worksequence_id={id}' as edit_url,
+    '/e_project_worksequence/worksequence_main_edit_3.sql?worksequence_id={id}' as edit_url,
     FALSE                 AS search;
 
 SELECT
