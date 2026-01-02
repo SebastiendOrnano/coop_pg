@@ -39,7 +39,7 @@ SELECT
 SELECT 'table' AS component, 
     'Liste des documents'   AS title,
     'Titre'           AS markdown,
-    '/d_prm3_doc/prm3_doc_main_edit_4.sql?prm3_doc_id={id}' as edit_url,
+    '/d_prm3_doc/prm3_doc_main_edit_3.sql?prm3_doc_id={id}' as edit_url,
     TRUE             AS sort, 
     TRUE             AS search;
 
