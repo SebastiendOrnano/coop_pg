@@ -49,7 +49,7 @@ SELECT
 SELECT 
     'table'               AS component, 
     TRUE                  AS sort, 
-    'View'                AS markdown,
+    '/d_prm3_participants/prm3_participant_main_edit_3.sql?prm3_participant_id={id}' as edit_url,
     'Nom'                AS markdown,
     'Employee'              AS markdown,
     'Corporate'              AS markdown,            
@@ -61,9 +61,8 @@ SELECT
     p.prm3_participant_role          AS role,
    '['||i.prm1_first_name||'  '||i.prm1_last_name||'](/d_prm1/prm1_profile_display_3.sql?prm1_id='||i.prm1_id||')'           AS Nom,
    '['||f.prm1_first_name||'  '||f.prm1_last_name||'](/d_prm1/prm1_profile_display_3.sql?prm1_id='||f.prm1_id||')'         AS Employee, 
-   '['|| c.prm2_sub_name ||'](/d_prm2_sub/prm2_sub_main_view_3.sql?prm2_sub_id='||c.prm2_sub_id||')' as Corporate,
-   '[Edit](/d_prm3_participants/prm3_participant_main_edit_3.sql?prm3_participant_id='||p.prm3_participant_id||'&prm3_id='||$prm3_id||')'    AS View
-FROM prm3_participants as p
+   '['|| c.prm2_sub_name ||'](/d_prm2_sub/prm2_sub_main_view_3.sql?prm2_sub_id='||c.prm2_sub_id||')' as Corporate
+   FROM prm3_participants as p
 LEFT JOIN (SELECT prm1_id, prm1_first_name, prm1_last_name FROM prm1) as i
 ON p.prm1_id = i.prm1_id
 LEFT JOIN (SELECT employee_id, prm2_sub_id, prm1_id FROM prm2_sub_employees) as e
