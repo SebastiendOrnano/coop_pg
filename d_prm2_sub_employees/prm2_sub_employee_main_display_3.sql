@@ -90,6 +90,7 @@ SELECT
 
 SELECT
     e.employee_id                   AS id,
+    e.employee_id                   AS _sqlpage_id,
     p.prm1_first_name                 AS Prénom,
     P.prm1_last_name                 AS Nom,
     e.employee_function              AS Poste,
