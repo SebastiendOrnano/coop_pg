@@ -40,7 +40,7 @@ SELECT
 SELECT 'table' AS component, 
     'Liste des documents'   AS title,
     'Titre'           AS markdown,
-    '/e_project_docs/project_doc_main_edit_4.sql?project_doc_id={id}' as edit_url,
+    '/e_project_docs/project_doc_main_edit_3.sql?project_doc_id={id}' as edit_url,
     TRUE             AS sort, 
     TRUE             AS search;
 
