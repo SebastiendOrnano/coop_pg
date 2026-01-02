@@ -62,7 +62,7 @@ CASE
     THEN JSON('{"name":"Facture","tooltip":"facture","link":"'|| e.expense_invoice_url||'","icon":"receipt-euro"}') 
     ELSE JSON('{"name":"Facture"}')
     END as _sqlpage_actions,
-    JSON( '{"name":"Edit","tooltip":"edit","link":"/e_project_workpackage_expenses/expense_main_edit_4.sql?expense_id='||e.expense_id||'","icon":"edit"}') AS _sqlpage_actions
+    JSON( '{"name":"Edit","tooltip":"edit","link":"/e_project_workpackage_expenses/expense_main_edit_3.sql?expense_id='||e.expense_id||'","icon":"edit"}') AS _sqlpage_actions
 FROM project_workpackage_expenses AS e
 LEFT JOIN (SELECT prm2_id, prm2_name FROM prm2) AS p
 on e.provider_id = p.prm2_id
