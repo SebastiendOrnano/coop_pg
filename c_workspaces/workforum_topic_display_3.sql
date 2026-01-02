@@ -47,8 +47,7 @@ SELECT       -- NOTE: the dots join values FROM the forum_topics and forum_messa
     t.topic_name     AS Topic,
     t.topic_category AS Categorie,
     to_char(m.created_at AT TIME ZONE 'Europe/Paris', 'YYYY-MM-DD HH24:MI')  AS Created_at,
-    (SELECT username FROM users WHERE users.user_id =  t.topic_author_id)    AS Contributeur,
-    '[Discussion](/c_workspaces/workforum_message_display_3.sql?topic_id='||t.topic_id||'&workspace_id='||$workspace_id||')'   AS View
+    (SELECT username FROM users WHERE users.user_id =  t.topic_author_id)    AS Contributeur
 FROM forum_topics AS t
 LEFT JOIN (
     SELECT topic_id, MAX(created_at) AS created_at,  message_author_id  
