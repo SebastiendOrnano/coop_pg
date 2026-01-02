@@ -35,7 +35,7 @@ SELECT
 -- Display list of project_meeting
 SELECT 'table' AS component, 
     'Liste des salles'   AS title, 
-    '/e_project_meeting/project_meeting_place_edit_4.sql?project_meeting_place_id={id}' as edit_url,
+    '/e_project_meeting/project_meeting_place_edit_3.sql?project_meeting_place_id={id}' as edit_url,
     TRUE             AS sort, 
     TRUE             AS search;
 
