@@ -1,0 +1,77 @@
+<div class="modal fade" id="{{id}}" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog {{#if large}}modal-xl{{/if}} modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{title}}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body p-0">
+        <div id="{{id}}_content" style="min-height: 300px;">
+          <div class="d-flex justify-content-center align-items-center p-5">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Chargement...</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{close}}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  const modalId = '{{id}}';
+  const contentId = '{{id}}_content';
+  
+  window.openInSqlpageModal = function(url) {
+    const modalEl = document.getElementById(modalId);
+    const contentEl = document.getElementById(contentId);
+    
+    if (!modalEl || !contentEl) {
+      console.log('Modal non trouvé - fallback onglet');
+      window.open(url, "_blank", "noopener");
+      return;
+    }
+
+    const fullUrl = 'http://localhost:8080/' + url.replace(/^\//, '');
+    
+    contentEl.innerHTML = `
+      <iframe src="${fullUrl}"
+              class="w-100 border-0" 
+              style="height: 60vh; min-height: 400px;" 
+              sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+              loading="lazy">
+        <div class="alert alert-danger p-3">
+          Erreur chargement: <a href="${fullUrl}" target="_blank" class="btn btn-sm btn-primary">Ouvrir</a>
+        </div>
+      </iframe>
+    `;
+
+    // JS natif - sans Bootstrap
+    modalEl.style.display = 'block';
+    modalEl.classList.add('show');
+    document.body.classList.add('modal-open');
+    document.body.style.overflow = 'hidden';
+    document.body.style.paddingRight = '0px';
+    
+    console.log('Modal ouvert:', url);
+  };
+
+  // Fermeture modal
+  document.addEventListener('click', function(e) {
+    if (e.target.matches('[data-bs-dismiss="modal"], .btn-close, .btn[data-bs-dismiss="modal"]')) {
+      const modalEl = document.getElementById(modalId);
+      if (modalEl) {
+        modalEl.style.display = 'none';
+        modalEl.classList.remove('show');
+        document.body.classList.remove('modal-open');
+        document.body.style.overflow = '';
+        document.body.style.paddingRight = '';
+      }
+    }
+  });
+})();
+</script>
