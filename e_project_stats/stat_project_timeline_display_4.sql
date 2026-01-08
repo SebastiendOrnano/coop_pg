@@ -60,7 +60,7 @@ SELECT
     TRUE as large;
 
 SELECT 
-    'chart1'            AS component,
+    'chart_modal'            AS component,
     'Workpackage Timeline' AS title,
     'rangeBar'         AS type,
     TRUE               AS time,
