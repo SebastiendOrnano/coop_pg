@@ -74,7 +74,7 @@ SELECT
     w.workpackage_name                       AS series,
     w.workpackage_id                         AS _sqlpage_id,
     w.workpackage_name  ||'    Planififié'    AS label,
-   '/e_project_workpackage/workpackage_main_edit_4.sql?workpackage_id='||w.workpackage_id as link,
+   '/e_project_workpackage/workpackage_date_edit_4.sql?workpackage_id='||w.workpackage_id as link,
     w.workpackage_date_start_scheduled        AS value,
     w.workpackage_date_end_scheduled          AS value
   FROM project_workpackage AS w
@@ -86,7 +86,7 @@ SELECT
 SELECT 
     w.workpackage_name                       AS series,
     w.workpackage_name  ||'    Réel'         AS label,
-   '/e_project_workpackage/workpackage_main_edit_4.sql?workpackage_id='||w.workpackage_id as link,
+   '/e_project_workpackage/workpackage_date_edit_4.sql?workpackage_id='||w.workpackage_id as link,
     w.workpackage_date_start_actual      AS value,
     w.workpackage_date_end_actual         AS value
 FROM project_workpackage AS w
