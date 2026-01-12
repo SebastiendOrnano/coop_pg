@@ -8,8 +8,8 @@ SET user_role = (
 
 SET redirect_link =
 CASE WHEN $user_role = 'supervisor' 
-THEN  '/e_project_stats/stat_project_timeline_display_4.sql?project_id='||$project_id
-ELSE  '/e_project_stats/stat_project_timeline_display_3.sql?project_id='||$project_id
+THEN  '/e_project_workpackage/workpackage_date_confirm_4.sql?workpackage_id='||$workpackage_id
+ELSE  '/e_project_workpackage/workpackage_date_confirm_3.sql?workpackage_id='||$workpackage_id
 END;
 
 
@@ -67,6 +67,4 @@ updated_at = CURRENT_TIMESTAMP
 
 SELECT 'redirect' AS component,
 $redirect_link AS link;
-
-
 
