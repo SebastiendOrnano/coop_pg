@@ -121,6 +121,13 @@ SELECT
     'orange'                         AS color;
 
 SELECT
+    '/e_project_plots/plot_main_display_4.sql?project_id='||$project_id   AS link,
+    'Foncier'                      AS description,
+    'geometry'                       AS icon,
+    'lue'                         AS color;
+
+
+SELECT
     '/e_project_building_rooms_pictures/project_picture_display_4.sql?project_id='||$project_id   AS link,
     'Gestion des photos du projet'                    AS description,
     'photo-search'                                     AS icon,
