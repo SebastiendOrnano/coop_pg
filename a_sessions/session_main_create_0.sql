@@ -1,23 +1,24 @@
 -- Redirect to the login page if the status is not correct
 
-SET user_status = SELECT user_status FROM users WHERE user_email = :username;
-SET user_id = SELECT user_id FROM users WHERE user_email = :username;
-
-SET redirect_link = (
-    SELECT
-        CASE
-            WHEN $user_id IS NULL
-            THEN '/a_sessions/session_create_alert1.sql'
-            WHEN $user_status = 'archived'
-            THEN '/a_sessions/session_create_alert2.sql'
-            ELSE ''
-        END
+-- 1) Utilisateur inexistant -> alerte 1
+SELECT 
+  'redirect' AS component,
+  '/a_sessions/session_create_alert1.sql' AS link
+WHERE NOT EXISTS (
+  SELECT 1 FROM users WHERE user_email = :username
 );
 
+-- 2) Utilisateur archivé -> alerte 2
 SELECT 
-'redirect' AS component, 
-$redirect_link AS link
-WHERE $redirect IS NOT NULL;
+  'redirect' AS component,
+  '/a_sessions/session_create_alert2.sql' AS link
+WHERE EXISTS (
+  SELECT 1 FROM users 
+  WHERE user_email = :username
+    AND user_status = 'archived'
+);
+
+
 
 -- Redirect to the login page if the password is not correct
 
