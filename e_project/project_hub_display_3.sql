@@ -51,7 +51,7 @@ SELECT
     'orange'                         AS color;
 
 SELECT
-    '/e_project_plots/plot_main_display_3.sql?project_id='||$project_id   AS link,
+    '/e_project_geo/geo_main_display_3.sql?project_id='||$project_id   AS link,
     'Foncier'                      AS description,
     'geometry'                       AS icon,
     'lue'                         AS color;
