@@ -57,6 +57,13 @@ SELECT
     'lue'                         AS color;
 
 SELECT
+    '/e_project_therm/therm_set_display_3.sql?project_id='||$project_id   AS link,
+    'Thermique'                    AS description,
+    'temperature-plus'                                     AS icon,
+    'green'                                           AS color;
+
+
+SELECT
     '/e_project_building_rooms_pictures/project_picture_display_3.sql?project_id='||$project_id   AS link,
     'Gestion des photos du projet'                    AS description,
     'photo-search'                                     AS icon,
