@@ -1,0 +1,9 @@
+SET room_id = SELECT room_id FROM therm_set WHERE therm_set_id = $therm_set_id::integer;
+SET building_id = SELECT building_id FROM project_building_rooms WHERE room_id = $room_id::integer;
+SET project_id = SELECT project_id FROM project_building WHERE building_id = $building_id::integer;
+
+
+DELETE FROM therm_set WHERE therm_set_id  = $therm_set_id::INTEGER
+RETURNING
+'redirect' AS component,
+'/e_project_therm/therm_set_display_4.sql?project_id='||$project_id AS link;
