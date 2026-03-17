@@ -15,7 +15,7 @@ VALUES (
     $therm_set_id::INTEGER,
     :sensor1::INTEGER,
     :sensor2::INTEGER,
-    'active'
+    'active',
     CURRENT_TIMESTAMP
 );
 

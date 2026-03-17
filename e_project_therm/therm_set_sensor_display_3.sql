@@ -71,7 +71,7 @@ SELECT
     d.therm_set_sensor_id        AS Id,
     d.therm_set_sensor_id        AS _sqlpage_id,
     r.room_name                      AS Lieu,
-    t.therm_sensor_name      AS Nom,
+    d.therm_set_sensor_name      AS Nom,
     CASE
     WHEN d.therm_set_sensor_point IS NOT NULL
     THEN JSON('{"name":"Map","tooltip":"Localisation du capteur","link":"/e_project_therm/therm_set_sensor_map_4.sql?therm_set_sensor_id={id}","icon":"map"}')
