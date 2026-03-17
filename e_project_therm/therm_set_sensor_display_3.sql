@@ -37,7 +37,7 @@ SELECT
     'yellow'                                                 as color;
 
 SELECT 
-    '/e_project_therm/therm_set_sensor_crossanalysis_step1_3.sql?therm_set_id='||$therm_set_id      as link,
+    '/e_project_therm/therm_set_sensor_crossanalysis_display_3.sql?therm_set_id='||$therm_set_id      as link,
     'Comparer les mesures 2 capteurs'                        as description,
     'arrows-cross'                                           as icon,
     'blue'                                                 as color;

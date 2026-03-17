@@ -9,6 +9,7 @@ CASE WHEN $user_role = 'supervisor'
 THEN  '/e_project_therm/therm_set_sensor_display_4.sql?therm_set_id='||$therm_set_id
 ELSE  '/e_project_therm/therm_set_sensor_display_3.sql?therm_set_id='||$therm_set_id
 END;
+
 WITH sensor_raw AS (
     SELECT
         sqlpage.read_file_as_text(
@@ -37,7 +38,14 @@ SELECT
     ),
     :therm_set_sensor_description,
     'active'
-FROM sensor
+FROM sensor;
 
+SET therm_set_sensor_id = SELECT MAX(therm_set_sensor_id) FROM therm_set_sensor WHERE therm_sensor_id=:therm_sensor_id::INTEGER;
+SET therm_sensor_name = SELECT  therm_sensor_name FROM therm_sensor WHERE therm_sensor_id=:therm_sensor_id::INTEGER;
+SET therm_set_sensor_name = SELECT CONCAT($therm_set_sensor_id::text,'-',$therm_sensor_name::text) FROM therm_sensor WHERE therm_sensor_id=:therm_sensor_id::INTEGER;
+
+UPDATE therm_set_sensor
+SET therm_set_sensor_name = $therm_set_sensor_name
+WHERE therm_set_sensor_id=$therm_set_sensor_id::INTEGER
 RETURNING 'redirect' AS component,
 $redirect_link  AS link;

@@ -29,23 +29,23 @@ SELECT
  SELECT 
     'Capteur'            as title,
     '/e_project_therm/therm_set_sensor_display_3.sql?therm_set_id='||$therm_set_id     as link;   
+SELECT 
+    'Comparaisons'            as title,
+    '/e_project_therm/therm_set_sensor_crossanalysis_display_3.sql?therm_set_id='||$therm_set_id     as link;   
 
 
-SET datasetsensor1 = (SELECT datasetsensor1 FROM therm_crossanalysis WHERE crossanalysis_id=$crossanalysis_id::INTEGER);
-SET datasetsensor2 = (SELECT datasetsensor2 FROM therm_crossanalysis WHERE crossanalysis_id=$crossanalysis_id::INTEGER);
+SET dataset_sensor1 = (SELECT dataset_sensor1 FROM therm_crossanalysis WHERE crossanalysis_id=$crossanalysis_id::INTEGER);
+SET dataset_sensor2 = (SELECT dataset_sensor2 FROM therm_crossanalysis WHERE crossanalysis_id=$crossanalysis_id::INTEGER);
 
 SET date_start_min = (SELECT DATE(crossanalysis_period_start) FROM therm_crossanalysis WHERE crossanalysis_id=$crossanalysis_id::INTEGER LIMIT 1);
 SET date_end_max = (SELECT DATE(crossanalysis_period_end) FROM therm_crossanalysis WHERE crossanalysis_id=$crossanalysis_id::INTEGER LIMIT 1);
 SET hour_start_min = (SELECT TO_CHAR(crossanalysis_period_start, 'HH24:MI') FROM therm_crossanalysis WHERE crossanalysis_id=$crossanalysis_id::INTEGER  LIMIT 1);
 SET hour_end_max = (SELECT TO_CHAR(crossanalysis_period_end, 'HH24:MI') FROM therm_crossanalysis WHERE crossanalysis_id=$crossanalysis_id::INTEGER  LIMIT 1);
 
-
-
-
-SET dataset1_date_start = SELECT Min(therm_data_date + therm_data_hour) FROM therm_data WHERE therm_dataset_id=:datasetsensor1::INTEGER;
-SET dataset2_date_start = SELECT Min(therm_data_date + therm_data_hour) FROM therm_data WHERE therm_dataset_id=:datasetsensor2::INTEGER;
-SET dataset1_date_end = SELECT Max(therm_data_date + therm_data_hour) FROM therm_data WHERE therm_dataset_id=:datasetsensor1::INTEGER;
-SET dataset2_date_end = SELECT Max(therm_data_date + therm_data_hour) FROM therm_data WHERE therm_dataset_id=:datasetsensor2::INTEGER;
+SET dataset1_date_start = SELECT Min(therm_data_date + therm_data_hour) FROM therm_data WHERE therm_dataset_id=$dataset_sensor1::INTEGER;
+SET dataset2_date_start = SELECT Min(therm_data_date + therm_data_hour) FROM therm_data WHERE therm_dataset_id=$dataset_sensor2::INTEGER;
+SET dataset1_date_end = SELECT Max(therm_data_date + therm_data_hour) FROM therm_data WHERE therm_dataset_id=$dataset_sensor1::INTEGER;
+SET dataset2_date_end = SELECT Max(therm_data_date + therm_data_hour) FROM therm_data WHERE therm_dataset_id=$dataset_sensor2::INTEGER;
 
 SET crossanalysis_period_start =
 CASE WHEN $dataset1_date_start >= $dataset2_date_start
@@ -64,8 +64,6 @@ SET crossanalysis_period_start = SELECT crossanalysis_period_start FROM therm_cr
 SET crossanalysis_period_end = SELECT crossanalysis_period_end FROM therm_crossanalysis WHERE crossanalysis_id=$crossanalysis_id::INTEGER;
 
 
-
-
 -- calcul dephasage entre les capteurs
 CREATE OR REPLACE VIEW therm_joined AS
 SELECT 
@@ -78,10 +76,10 @@ WITH
 temps_precalcule AS 
 (
     SELECT ts,
-           MAX(CASE WHEN therm_dataset_id = :datasetsensor1::INTEGER THEN therm_data_temp END) AS temp_int,
-           MAX(CASE WHEN therm_dataset_id = :datasetsensor2::INTEGER THEN therm_data_temp END) AS temp_ext
+           MAX(CASE WHEN therm_dataset_id = $dataset_sensor1::INTEGER THEN therm_data_temp END) AS temp_int,
+           MAX(CASE WHEN therm_dataset_id = $dataset_sensor2::INTEGER THEN therm_data_temp END) AS temp_ext
     FROM therm_joined
-    WHERE therm_dataset_id IN (:datasetsensor1::INTEGER, :datasetsensor2::INTEGER)
+    WHERE therm_dataset_id IN ($dataset_sensor1::INTEGER, $dataset_sensor2::INTEGER)
     AND ts BETWEEN $crossanalysis_period_start::timestamp AND $crossanalysis_period_end::timestamp
     GROUP BY ts
 ),
@@ -131,10 +129,10 @@ WITH
 temps_precalcule AS 
 (
     SELECT ts,
-           MAX(CASE WHEN therm_dataset_id = :datasetsensor1::INTEGER THEN therm_data_rh END) AS rh_int,
-           MAX(CASE WHEN therm_dataset_id = :datasetsensor2::INTEGER THEN therm_data_rh END) AS rh_ext
+           MAX(CASE WHEN therm_dataset_id = $dataset_sensor1::INTEGER THEN therm_data_rh END) AS rh_int,
+           MAX(CASE WHEN therm_dataset_id = $dataset_sensor2::INTEGER THEN therm_data_rh END) AS rh_ext
     FROM therm_joined
-    WHERE therm_dataset_id IN (:datasetsensor1::INTEGER, :datasetsensor2::INTEGER)
+    WHERE therm_dataset_id IN ($dataset_sensor1::INTEGER, $dataset_sensor2::INTEGER)
     AND ts BETWEEN $crossanalysis_period_start::timestamp AND $crossanalysis_period_end::timestamp
     GROUP BY ts
 ),
@@ -185,6 +183,14 @@ SELECT
     '' as validate;
 
 SELECT
+    'therm_set_name' as name,
+    'text' as type,  
+    'Description' as label,
+    true as readonly,
+    6 AS width,
+    (SELECT therm_set_name FROM therm_set WHERE therm_set_id=$therm_set_id::INTEGER) as value;
+
+SELECT
     'therm_set_description' as name,
     'text' as type,  
     'Description' as label,
@@ -192,26 +198,26 @@ SELECT
     6 AS width,
     (SELECT therm_set_description FROM therm_set WHERE therm_set_id=$therm_set_id::INTEGER) as value;
 SELECT
-    'datasetsensor1' as name,
+    'datasetsensor1_name' as name,
     'Nom du capteur 1' as label,
     'text'      as type,
     3 AS width,
     true as readonly,
-    (SELECT therm_sensor_name 
-    FROM therm_sensor AS s
-    LEFT JOIN (SELECT sensor1_id, sensor2_id,crossanalysis_id FROM therm_crossanalysis) as c 
-    ON s.therm_sensor_id = c.sensor1_id
+    (SELECT therm_set_sensor_name 
+    FROM therm_set_sensor AS s
+    LEFT JOIN (SELECT datasetsensor1, datasetsensor2, crossanalysis_id FROM therm_crossanalysis) as c 
+    ON s.therm_set_sensor_id = c.datasetsensor1
     WHERE c.crossanalysis_id=$crossanalysis_id::INTEGER) as value;
 SELECT
-    'datasetsensor2' as name,
+    'datasetsensor2_name' as name,
     'Nom du capteur 2' as label,
     'text'      as type,
     3 AS width,
     true as readonly,
-    (SELECT therm_sensor_name 
-    FROM therm_sensor AS s
-    LEFT JOIN (SELECT sensor1_id, sensor2_id,crossanalysis_id FROM therm_crossanalysis) as c 
-    ON s.therm_sensor_id = c.sensor1_id
+    (SELECT therm_set_sensor_name 
+    FROM therm_set_sensor AS s
+    LEFT JOIN (SELECT datasetsensor1, datasetsensor2, crossanalysis_id FROM therm_crossanalysis) as c 
+    ON s.therm_set_sensor_id = c.datasetsensor2
     WHERE c.crossanalysis_id=$crossanalysis_id::INTEGER) as value;
 SELECT
     'crossanalysis_period_start' as name,
@@ -287,13 +293,13 @@ SELECT
     WITH amps AS (
       SELECT 
         CASE 
-        WHEN therm_dataset_id = :datasetsensor2::INTEGER  THEN 'ext'
-        WHEN therm_dataset_id = :datasetsensor1::INTEGER THEN 'int' 
+        WHEN therm_dataset_id = $dataset_sensor2::INTEGER  THEN 'ext'
+        WHEN therm_dataset_id = $dataset_sensor1::INTEGER THEN 'int' 
         END as type,
         MAX(therm_data_temp) as tmax,
         MIN(therm_data_temp) as tmin
       FROM therm_data
-      WHERE therm_dataset_id IN (:datasetsensor2::INTEGER, :datasetsensor1::INTEGER)
+      WHERE therm_dataset_id IN ($dataset_sensor2::INTEGER, :dataset_sensor1::INTEGER)
     AND (therm_data_date + therm_data_hour)::timestamp BETWEEN $crossanalysis_period_start::timestamp  AND $crossanalysis_period_end::timestamp
       GROUP BY therm_dataset_id
     )
@@ -321,7 +327,7 @@ SELECT
     (
         SELECT stddev(therm_data_temp)::numeric(10,2)
         FROM therm_data
-        WHERE therm_dataset_id = :datasetsensor1::integer
+        WHERE therm_dataset_id = $dataset_sensor1::integer
        AND therm_data_date + therm_data_hour BETWEEN $crossanalysis_period_start::timestamp AND $crossanalysis_period_end::timestamp
     ) AS value,
     3 AS width;
@@ -334,7 +340,7 @@ SELECT
     (
         SELECT stddev(therm_data_temp)::numeric(10,2)
         FROM therm_data
-        WHERE therm_dataset_id = :datasetsensor2::integer
+        WHERE therm_dataset_id = $dataset_sensor2::integer
         AND therm_data_date + therm_data_hour BETWEEN $crossanalysis_period_start::timestamp AND $crossanalysis_period_end::timestamp
     ) AS value,
     3 AS width;
@@ -351,14 +357,14 @@ SELECT
     therm_data_temp::TEXT     AS y,
     therm_data_date + therm_data_hour AS x
     FROM therm_data  
-    WHERE therm_dataset_id=:datasetsensor1::INTEGER
+    WHERE therm_dataset_id=$dataset_sensor1::INTEGER
     AND therm_data_date + therm_data_hour BETWEEN $crossanalysis_period_start::timestamp AND $crossanalysis_period_end::timestamp;
 SELECT 
     'sensor 2 temp'      AS series,
     therm_data_temp::TEXT     AS y,
     therm_data_date + therm_data_hour AS x
     FROM therm_data  
-    WHERE therm_dataset_id=:datasetsensor2::INTEGER
+    WHERE therm_dataset_id=$dataset_sensor2::INTEGER
     AND therm_data_date + therm_data_hour BETWEEN $crossanalysis_period_start::timestamp AND $crossanalysis_period_end::timestamp;
 
 
@@ -379,13 +385,13 @@ SELECT
     WITH amps AS (
       SELECT 
         CASE 
-        WHEN therm_dataset_id = :datasetsensor2::INTEGER  THEN 'ext'
-        WHEN therm_dataset_id = :datasetsensor1::INTEGER THEN 'int' 
+        WHEN therm_dataset_id = $dataset_sensor2::INTEGER  THEN 'ext'
+        WHEN therm_dataset_id = $dataset_sensor1::INTEGER THEN 'int' 
         END as type,
         MAX(therm_data_rh) as tmax,
         MIN(therm_data_rh) as tmin
       FROM therm_data
-      WHERE therm_dataset_id IN (:datasetsensor2::INTEGER, :datasetsensor1::INTEGER)
+      WHERE therm_dataset_id IN ($dataset_sensor2::INTEGER, $dataset_sensor1::INTEGER)
      AND therm_data_date + therm_data_hour BETWEEN $crossanalysis_period_start::timestamp AND $crossanalysis_period_end::timestamp
       GROUP BY therm_dataset_id
     )
@@ -415,7 +421,7 @@ SELECT
     (
         SELECT stddev(therm_data_rh)::numeric(10,2)
         FROM therm_data
-        WHERE therm_dataset_id = :datasetsensor1::integer
+        WHERE therm_dataset_id = $dataset_sensor1::integer
          AND therm_data_date + therm_data_hour BETWEEN $crossanalysis_period_start::timestamp AND $crossanalysis_period_end::timestamp
     ) AS value,
     3 AS width;
@@ -428,7 +434,7 @@ SELECT
     (
         SELECT stddev(therm_data_rh)::numeric(10,2)
         FROM therm_data
-        WHERE therm_dataset_id = :datasetsensor2::integer
+        WHERE therm_dataset_id = $dataset_sensor2::integer
          AND therm_data_date + therm_data_hour BETWEEN $crossanalysis_period_start::timestamp AND $crossanalysis_period_end::timestamp
     ) AS value,
     3 AS width;
@@ -446,13 +452,13 @@ SELECT
     therm_data_rh    AS y,
     therm_data_date + therm_data_hour AS x
     FROM therm_data 
-    WHERE therm_dataset_id=:datasetsensor1::INTEGER
+    WHERE therm_dataset_id=$dataset_sensor1::INTEGER
     AND (therm_data_date::DATE + therm_data_hour::TIME)::timestamp BETWEEN $crossanalysis_period_start::timestamp AND $crossanalysis_period_end::timestamp;
 SELECT 
     'sensor 2 rh'      AS series,
     therm_data_rh     AS y,
     therm_data_date + therm_data_hour AS x
     FROM therm_data 
-    WHERE therm_dataset_id=:datasetsensor2::INTEGER
+    WHERE therm_dataset_id=$dataset_sensor2::INTEGER
     AND (therm_data_date::DATE + therm_data_hour::TIME)::timestamp BETWEEN $crossanalysis_period_start::timestamp AND $crossanalysis_period_end::timestamp;
 

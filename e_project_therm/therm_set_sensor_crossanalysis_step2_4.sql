@@ -1,8 +1,10 @@
 SELECT 'dynamic' AS component, sqlpage.run_sql('a_shells/shell_4.sql') AS properties;
 
+SET therm_set_id = SELECT therm_set_id FROM therm_crossanalysis WHERE  crossanalysis_id=$crossanalysis_id::INTEGER;
 SET room_id = SELECT room_id FROM therm_set WHERE therm_set_id = $therm_set_id::integer;
 SET building_id = SELECT building_id FROM project_building_rooms WHERE room_id = $room_id::integer;
 SET project_id = SELECT project_id FROM project_building WHERE building_id = $building_id::integer;
+
 
 SELECT 
     'breadcrumb' as component;
@@ -30,7 +32,7 @@ SELECT
     'Choisir les jeux de données pour chaque capteur' as title,
     'Créer' as validate,
     'Clear' as reset,
-    '/e_project_therm/therm_set_sensor_crossanalysis_create_0.sql?therm_set_id='||$therm_set_id as action;
+    '/e_project_therm/therm_set_sensor_crossanalysis_step2_create_0.sql?crossanalysis_id='||$crossanalysis_id as action;
 
 SELECT 
     'sensor1_id'   AS name,
@@ -43,45 +45,49 @@ SELECT
     (SELECT therm_sensor_id FROM therm_sensor as s
     WHERE s.therm_sensor_id=:sensor2::INTEGER) as value;
 SELECT 
-    'Capteur1_name'   AS name,
+    'therm_set_sensor_name1'   AS name,
     'text'                        AS type,
     true as readonly,
     6                            AS width,
     'désignation du capteur ex: sensor int' as description,   
-    (SELECT therm_sensor_name FROM therm_sensor as s
-    WHERE s.therm_sensor_id=:sensor1::INTEGER) as value,  
+    (SELECT therm_set_sensor_name FROM therm_set_sensor as s
+    LEFT JOIN (select crossanalysis_id, datasetsensor1, datasetsensor2 FROM therm_crossanalysis) as c
+    ON s.therm_set_sensor_id=c.datasetsensor1
+    WHERE c.crossanalysis_id=$crossanalysis_id::INTEGER) as value,  
     'Nom du capteur 1'                         AS label;
 
 SELECT 
-    'Capteur2_name'   AS name,
+    'therm_set_sensor_name2'   AS name,
     'text'                        AS type,
     true as readonly,
     6                            AS width,
-    'désignation du capteur ex: sensor int' as description,
-    (SELECT therm_sensor_name FROM therm_sensor as s
-    WHERE s.therm_sensor_id=:sensor2::INTEGER) as value,
+    'désignation du capteur ex: sensor int' as description,   
+    (SELECT therm_set_sensor_name FROM therm_set_sensor as s
+    LEFT JOIN (select crossanalysis_id, datasetsensor1, datasetsensor2 FROM therm_crossanalysis) as c
+    ON s.therm_set_sensor_id=c.datasetsensor2
+    WHERE c.crossanalysis_id=$crossanalysis_id::INTEGER) as value,  
     'Nom du capteur 2'                         AS label;
 
 SELECT
-    'datasetsensor1'                 as name,
+    'dataset_sensor1'                 as name,
     'dataset (capteur1)'          as label,
     'select'                                as type,
     6                                     AS width,
     'Choisir une date dans la liste...'    AS empty_option,
     json_agg(JSON_BUILD_OBJECT('label', therm_dataset_name, 'value', d.therm_dataset_id)) AS options
     FROM therm_dataset as d
-    LEFT JOIN (SELECT therm_sensor_id, therm_set_sensor_id, therm_set_id FROM therm_set_sensor) as t
-    ON d.therm_set_sensor_id = t.therm_set_sensor_id
-    WHERE t.therm_sensor_id = :sensor1::integer;
+    LEFT JOIN (select crossanalysis_id, datasetsensor1, datasetsensor2 FROM therm_crossanalysis) as c
+    ON d.therm_set_sensor_id=c.datasetsensor1
+    WHERE c.crossanalysis_id=$crossanalysis_id::INTEGER;  
 
 SELECT
-    'datasetsensor2'                 as name,
+    'dataset_sensor2'                 as name,
     'dataset (capteur2)'          as label,
     'select'                                as type,
-    6                                    AS width,
+    6                                     AS width,
     'Choisir une date dans la liste...'    AS empty_option,
     json_agg(JSON_BUILD_OBJECT('label', therm_dataset_name, 'value', d.therm_dataset_id)) AS options
     FROM therm_dataset as d
-    LEFT JOIN (SELECT therm_sensor_id, therm_set_sensor_id, therm_set_id FROM therm_set_sensor) as t
-    ON d.therm_set_sensor_id = t.therm_set_sensor_id
-    WHERE t.therm_sensor_id = :sensor2::integer;
+    LEFT JOIN (select crossanalysis_id, datasetsensor1, datasetsensor2 FROM therm_crossanalysis) as c
+    ON d.therm_set_sensor_id=c.datasetsensor2
+    WHERE c.crossanalysis_id=$crossanalysis_id::INTEGER;  

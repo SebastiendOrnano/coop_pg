@@ -1,5 +1,6 @@
 SELECT 'dynamic' AS component, sqlpage.run_sql('a_shells/shell_3.sql') AS properties;
 
+SET therm_set_id = SELECT therm_set_id WHERE crossanalysis_id=$crossanalysis_id::INTEGER;
 SET room_id = SELECT room_id FROM therm_set WHERE therm_set_id = $therm_set_id::integer;
 SET building_id = SELECT building_id FROM project_building_rooms WHERE room_id = $room_id::integer;
 SET project_id = SELECT project_id FROM project_building WHERE building_id = $building_id::integer;

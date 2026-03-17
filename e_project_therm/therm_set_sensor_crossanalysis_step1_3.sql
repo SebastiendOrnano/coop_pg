@@ -33,7 +33,7 @@ SELECT
     'Choisir les capteurs' as title,
     'Créer' as validate,
     'Clear' as reset,
-    '/e_project_therm/therm_set_sensor_crossanalysis_step2_4.sql?therm_set_id='||$therm_set_id as action;
+    '/e_project_therm/therm_set_sensor_crossanalysis_step1_create_0.sql?therm_set_id='||$therm_set_id as action;
 
 
 SELECT
@@ -42,11 +42,9 @@ SELECT
     'select'                                as type,
     6                                     AS width,
     'Choisir une date dans la liste...'    AS empty_option,
-    json_agg(JSON_BUILD_OBJECT('label', therm_sensor_name, 'value', s.therm_sensor_id)) AS options
-    FROM therm_sensor as s
-    LEFT JOIN (SELECT therm_sensor_id, therm_set_sensor_id, therm_set_id FROM therm_set_sensor) as t
-    ON s.therm_sensor_id = t.therm_sensor_id
-    WHERE t.therm_set_id = $therm_set_id::integer;
+    json_agg(JSON_BUILD_OBJECT('label', s.therm_set_sensor_name, 'value', s.therm_set_sensor_id)) AS options
+    FROM therm_set_sensor as s
+    WHERE s.therm_set_id = $therm_set_id::integer;
 
 SELECT
     'sensor2'                 as name,
@@ -54,8 +52,6 @@ SELECT
     'select'                                as type,
     6                                    AS width,
     'Choisir une date dans la liste...'    AS empty_option,
-    json_agg(JSON_BUILD_OBJECT('label', therm_sensor_name, 'value', s.therm_sensor_id)) AS options
-    FROM therm_sensor as s
-    LEFT JOIN (SELECT therm_sensor_id, therm_set_sensor_id, therm_set_id FROM therm_set_sensor) as t
-    ON s.therm_sensor_id = t.therm_sensor_id
-    WHERE t.therm_set_id = $therm_set_id::integer;
+    json_agg(JSON_BUILD_OBJECT('label', s.therm_set_sensor_name, 'value', s.therm_set_sensor_id)) AS options
+    FROM therm_set_sensor as s
+    WHERE s.therm_set_id = $therm_set_id::integer;
