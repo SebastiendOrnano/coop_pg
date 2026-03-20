@@ -1,4 +1,4 @@
-set project_id = SELECT project_id FROM project_geo WHERE geo_id=$geo_id::NTEGER;
+set project_id = SELECT project_id FROM project_geo WHERE geo_id=$geo_id::INTEGER;
 
 DELETE FROM project_geo WHERE geo_id  = $geo_id::INTEGER 
 RETURNING
