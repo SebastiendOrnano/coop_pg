@@ -36,6 +36,13 @@ VALUES
 SET therm_dataset_sample_id = (SELECT MAX(therm_dataset_sample_id) FROM therm_dataset_sample WHERE therm_dataset_id = $therm_dataset_id::INTEGER);
 
 
+SET redirect_link =
+CASE WHEN $user_role = 'supervisor' 
+THEN  '/e_project_therm/therm_dataset_sample_chart_4.sql?therm_dataset_sample_id='||$therm_dataset_sample_id
+ELSE  '/e_project_therm/therm_dataset_sample_chart_3.sql?therm_dataset_sample_id='||$therm_dataset_sample_id
+END;
+
+
 WITH params AS (
   SELECT
     (therm_dataset_sample_date_start + therm_dataset_sample_hour_start) AS therm_dataset_sample_period_start,
