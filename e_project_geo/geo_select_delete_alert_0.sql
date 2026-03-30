@@ -1,0 +1,38 @@
+SET user_role = (
+    SELECT user_role FROM users
+    INNER JOIN sessions ON users.user_id = sessions.user_id
+    WHERE sessions.session_token = sqlpage.cookie('session_token')
+); 
+
+SET suffix_role = 
+(
+	    SELECT
+        CASE
+            WHEN $user_role = 'supervisor' THEN '_4.sql'
+            WHEN $user_role = 'editor' THEN '_3.sql'
+        END
+);
+  
+SET redirect_link = (
+    SELECT CASE
+        WHEN NOT EXISTS (
+            SELECT 1
+            FROM project_geo
+            WHERE geo_selected = true
+        )
+        THEN '/e_project_geo/geo_select_delete_alert' || $suffix_role ||'?geo_group_id='||$geo_group_id
+        ELSE '/e_project_geo/geo_select_display' || $suffix_role ||'?building_id='||:building_id::INTEGER
+    END
+);
+
+SELECT 
+'redirect' AS component, 
+$redirect_link AS link;
+
+
+DELETE FROM project_geo
+WHERE geo_selected = true
+
+RETURNING 
+'redirect' AS component, 
+'/e_project_geo/geo_select_display_4.sql?geo_group_id='||$geo_group_id  AS link;
