@@ -38,7 +38,7 @@ SELECT
 
 SELECT 
     'table'               AS component, 
-    'Liste des jeux de données' AS title, 
+    'Liste des compraisons archivées' AS title, 
     TRUE                  AS sort,
     JSON('{"name":"Crossanalysis","tooltip":"Visualiser la comparaison","link":"/e_project_therm/therm_set_sensor_crossanalysis_chart_4.sql?crossanalysis_id={id}","icon":"chart-area-line"}') as custom_actions,
     JSON('{"name":"Unarchive","tooltip":"Archiver la comparaison","link":"/e_project_therm/therm_set_sensor_crossanalysis_unarchive_0.sql?crossanalysis_id={id}","icon":"archive-off"}') as custom_actions,
@@ -51,9 +51,10 @@ SELECT
     TO_CHAR(d.crossanalysis_period_start::timestamp, 'YYYY-MM-DD HH24:MI')     AS Start, 
     TO_CHAR(d.crossanalysis_period_end::timestamp, 'YYYY-MM-DD HH24:MI')         AS End,
     (SELECT therm_set_sensor_name FROM therm_set_sensor AS s
-    WHERE s.therm_set_sensor_id=d.datasetsensor1)  as Capteur1,
+    WHERE s.therm_set_sensor_id=d.therm_set_sensor1_id)  as Capteur1,
     (SELECT therm_set_sensor_name FROM therm_set_sensor AS s
-    WHERE s.therm_set_sensor_id=d.datasetsensor2) as Capteur2
+    WHERE s.therm_set_sensor_id=d.therm_set_sensor2_id) as Capteur2
+FROM therm_crossanalysis AS d
 
-WHERE therm_set_id=$therm_set_id::INTEGER AND d.crossanalysis_status !='active'
+WHERE therm_set_id=$therm_set_id::INTEGER AND d.crossanalysis_status='archived'
 ORDER BY  d.crossanalysis_period_start ASC;

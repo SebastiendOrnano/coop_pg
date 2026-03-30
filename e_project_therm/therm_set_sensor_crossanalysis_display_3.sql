@@ -72,7 +72,7 @@ SELECT
 
 SELECT 
     'table'               AS component, 
-    'Liste des jeux de données' AS title, 
+    'Liste des comparaisons' AS title, 
     TRUE                  AS sort,
     JSON('{"name":"Crossanalysis","tooltip":"Visualiser la comparaison","link":"/e_project_therm/therm_set_sensor_crossanalysis_chart_4.sql?crossanalysis_id={id}","icon":"chart-area-line"}') as custom_actions,
    JSON('{"name":"Map","tooltip":"Localisation des capteur","link":"/e_project_therm/therm_set_sensor_crossanalysis_map_3.sql?crossanalysis_id={id}","icon":"map"}') as custom_actions,
