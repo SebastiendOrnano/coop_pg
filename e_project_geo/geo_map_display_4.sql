@@ -24,15 +24,7 @@ SELECT
     'Éléments topo'                                                AS title,
     '/e_project_geo/geo_main_display_4.sql?geo_group_id='||$geo_group_id     AS link;
 
-SELECT 
-    'button'              as component;
-SELECT 
-    'javascript:mapexportpng()'  AS link,
-    'mapexportpng' as id,
-    'PNG'                         as title,
-    'Exporter map en png'         as description,
-    'download'                     AS icon,
-    'green' AS color;
+
 SELECT 
     'map'   AS component,
     'Localisation de l''élément topo' AS title,
