@@ -21,16 +21,6 @@ SELECT
     '/e_project/geo_group_display_3.sql?project_id='||$project_id     AS link; 
 
 SELECT 
-    'button'              as component;
-SELECT 
-    'javascript:mapexportpng()'  AS link,
-    'mapexportpng' as id,
-    'PNG'                         as title,
-    'Exporter map en png'         as description,
-    'download'                     AS icon,
-    'green' AS color;
-
-SELECT 
     'map'   AS component,
     'Carte de nos projets' AS title,
     'map'         as id,
