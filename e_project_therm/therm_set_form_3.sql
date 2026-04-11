@@ -41,7 +41,8 @@ SELECT
     'lieu des mesure' AS label,
     'select' AS type,
     6 AS width,
-    TRUE AS searchable,
+    TRUE AS searchable
+    TRUE as required,
    'Saisissez quelques lettres du titre que vous cherchez ou choississez dans la liste' AS empty_option,
     json_agg(JSON_BUILD_OBJECT('label',b.building_name||' -- '||r.room_name||' -- '||r.room_type , 'value', r.room_id))  AS options
     FROM project_building_rooms AS r
