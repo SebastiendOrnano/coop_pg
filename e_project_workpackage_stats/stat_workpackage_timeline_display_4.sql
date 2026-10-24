@@ -69,7 +69,7 @@ on p.project_id=w.project_id
 WHERE p.project_id=$project_id::INTEGER;
 
 SELECT 
-    'chart2'            as component,
+    'chart'            as component,
     'Worksquences Timeline' as title,
     'rangeBar'         as type,
     TRUE               as time,
